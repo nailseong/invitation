@@ -2,4 +2,4 @@ rootProject.name = 'invitation'
 
 include 'invitation-ui'
 include 'invitation-domain'
-
+include 'invitation-infrastructure'
