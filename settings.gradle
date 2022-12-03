@@ -1,1 +1,3 @@
 rootProject.name = 'invitation'
+
+include 'invitation-ui'
