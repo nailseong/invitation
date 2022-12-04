@@ -3,6 +3,7 @@ package com.nailseong.acceptance;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.CREATED;
 
+import com.nailseong.invitation.presentation.member.dto.SignupRequest;
 import io.restassured.RestAssured;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -24,7 +25,7 @@ class MemberAcceptanceTest extends AcceptanceTest {
             @DisplayName("사용자 이름이 유효한 경우이다.")
             void validUsername() {
                 // given
-                final var request = "";
+                final var request = new SignupRequest("ilseong");
 
                 // when
                 final var response = RestAssured.given().log().all()
@@ -47,7 +48,10 @@ class MemberAcceptanceTest extends AcceptanceTest {
             @DisplayName("사용자 이름이 중복되는 경우이다.")
             void duplicateUsername() {
                 // given
-                final var request = "";
+                final var username = "ilseong";
+                signup(username);
+
+                final var request = new SignupRequest(username);
 
                 // when
                 final var response = RestAssured.given().log().all()
@@ -60,6 +64,17 @@ class MemberAcceptanceTest extends AcceptanceTest {
                 // then
                 response.statusCode(BAD_REQUEST.value());
             }
+        }
+
+        private void signup(final String username) {
+            final var request = new SignupRequest(username);
+
+            RestAssured.given().log().all()
+                    .body(request)
+                    .contentType(MediaType.APPLICATION_JSON_VALUE)
+                    .when()
+                    .post("/api/members")
+                    .then().log().all();
         }
     }
 }
