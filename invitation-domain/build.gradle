@@ -1,5 +1,6 @@
 dependencies {
     implementation project(':invitation-infrastructure')
+    implementation project(':core')
 
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 }
