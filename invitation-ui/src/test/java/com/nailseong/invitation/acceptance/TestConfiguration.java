@@ -1,4 +1,4 @@
-package com.nailseong.acceptance;
+package com.nailseong.invitation.acceptance;
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 

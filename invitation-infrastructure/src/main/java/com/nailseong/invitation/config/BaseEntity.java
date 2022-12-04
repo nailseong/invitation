@@ -1,4 +1,4 @@
-package com.nailseong.config;
+package com.nailseong.invitation.config;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;

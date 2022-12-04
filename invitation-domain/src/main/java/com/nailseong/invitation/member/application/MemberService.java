@@ -1,7 +1,7 @@
 package com.nailseong.invitation.member.application;
 
-import com.nailseong.member.MemberEntity;
-import com.nailseong.member.MemberRepository;
+import com.nailseong.invitation.member.MemberEntity;
+import com.nailseong.invitation.member.MemberRepository;
 import org.springframework.stereotype.Service;
 
 @Service

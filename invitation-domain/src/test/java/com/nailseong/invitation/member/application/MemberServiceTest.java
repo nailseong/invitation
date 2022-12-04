@@ -6,8 +6,8 @@ import static org.mockito.Mockito.eq;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-import com.nailseong.member.MemberEntity;
-import com.nailseong.member.MemberRepository;
+import com.nailseong.invitation.member.MemberEntity;
+import com.nailseong.invitation.member.MemberRepository;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
