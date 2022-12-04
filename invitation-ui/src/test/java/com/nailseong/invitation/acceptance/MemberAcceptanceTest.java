@@ -3,7 +3,7 @@ package com.nailseong.invitation.acceptance;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.CREATED;
 
-import com.nailseong.invitation.presentation.member.dto.SignupRequest;
+import com.nailseong.invitation.member.dto.SignupRequest;
 import io.restassured.RestAssured;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
