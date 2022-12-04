@@ -1,5 +1,8 @@
 package com.nailseong.invitation.acceptance;
 
+import static io.restassured.http.Method.POST;
+
+import com.nailseong.invitation.member.dto.SignupRequest;
 import com.nailseong.invitation.util.DatabaseCleaner;
 import io.restassured.RestAssured;
 import io.restassured.http.Method;
@@ -23,6 +26,15 @@ abstract class AcceptanceTest {
     void setUp() {
         RestAssured.port = port;
         databaseCleaner.clean();
+    }
+
+    protected void signup(final String username) {
+        final var request = new SignupRequest(username);
+
+        url("/api/members")
+                .body(request)
+                .method(POST)
+                .send();
     }
 
     protected UrlBuilder url(final String url) {
