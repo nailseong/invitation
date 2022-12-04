@@ -3,8 +3,10 @@ package com.nailseong.invitation.member.application;
 import com.nailseong.invitation.member.MemberEntity;
 import com.nailseong.invitation.member.MemberRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional
 public class MemberService {
 
     private final MemberRepository memberRepo;
