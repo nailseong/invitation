@@ -1,6 +1,6 @@
-package com.nailseong.channel;
+package com.nailseong.invitation.channel;
 
-import com.nailseong.config.BaseEntity;
+import com.nailseong.invitation.config.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;

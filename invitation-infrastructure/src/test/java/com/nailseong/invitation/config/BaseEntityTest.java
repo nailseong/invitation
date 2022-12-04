@@ -1,8 +1,8 @@
-package com.nailseong.config;
+package com.nailseong.invitation.config;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.nailseong.TestConfiguration;
+import com.nailseong.invitation.TestConfiguration;
 import jakarta.persistence.Entity;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

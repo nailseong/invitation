@@ -1,4 +1,4 @@
-package com.nailseong.invitation;
+package com.nailseong.invitation.invitation;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
