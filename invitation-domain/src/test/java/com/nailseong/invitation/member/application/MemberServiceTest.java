@@ -8,6 +8,7 @@ import static org.mockito.Mockito.verify;
 
 import com.nailseong.invitation.member.MemberEntity;
 import com.nailseong.invitation.member.MemberRepository;
+import com.nailseong.invitation.member.exception.DuplicateUsernameException;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -50,7 +51,6 @@ class MemberServiceTest {
                 .willReturn(Optional.of(MEMBER_ENTITY));
 
         assertThatThrownBy(() -> memberService.signup(USERNAME))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("이미 사용중인 사용자 이름입니다.");
+                .isInstanceOf(DuplicateUsernameException.class);
     }
 }
