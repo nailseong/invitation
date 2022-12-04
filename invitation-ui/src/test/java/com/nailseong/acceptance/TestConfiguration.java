@@ -1,8 +1,7 @@
-package com.nailseong;
+package com.nailseong.acceptance;
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public
-class TestConfiguration {
+public class TestConfiguration {
 }

@@ -1,6 +1,5 @@
 package com.nailseong.acceptance;
 
-import com.nailseong.TestConfiguration;
 import io.restassured.RestAssured;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.boot.test.context.SpringBootTest;
