@@ -25,6 +25,7 @@ public class InvitationService {
     }
 
     public String createInvitation(final InvitationInfo invitationInfo) {
+        // TODO: 2022/12/08 사용자 유효성 검사 
         // TODO: 2022/12/08 사용자가 호스트인지 검증하는 로직을 분리한다.
         final Channel channel = channelRepository.findById(invitationInfo.channelId())
                 .orElseThrow(ChannelNotFoundException::new);
