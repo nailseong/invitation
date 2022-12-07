@@ -1,6 +1,8 @@
 package com.nailseong.invitation.channel.application;
 
 import com.nailseong.invitation.channel.domain.Channel;
+import com.nailseong.invitation.channel.domain.ChannelMember;
+import com.nailseong.invitation.channel.domain.ChannelMemberRepository;
 import com.nailseong.invitation.channel.domain.ChannelRepository;
 import com.nailseong.invitation.member.MemberRepository;
 import com.nailseong.invitation.member.exception.MemberNotFoundException;
@@ -13,10 +15,14 @@ public class ChannelService {
 
     private final MemberRepository memberRepo;
     private final ChannelRepository channelRepo;
+    private final ChannelMemberRepository channelMemberRepo;
 
-    public ChannelService(final MemberRepository memberRepo, final ChannelRepository channelRepo) {
+    public ChannelService(final MemberRepository memberRepo,
+                          final ChannelRepository channelRepo,
+                          final ChannelMemberRepository channelMemberRepo) {
         this.memberRepo = memberRepo;
         this.channelRepo = channelRepo;
+        this.channelMemberRepo = channelMemberRepo;
     }
 
     public Long createChannel(final Long memberId, final String nickname, final int maxPeople) {
@@ -24,7 +30,8 @@ public class ChannelService {
                 .orElseThrow(MemberNotFoundException::new);
         final Channel channel = channelRepo.save(Channel.ofNew(memberId, maxPeople));
 
-        // TODO: 2022/12/07 채널에 방장 저장 
+        final ChannelMember host = ChannelMember.ofHost(channel.getId(), memberId, nickname);
+        channelMemberRepo.save(host);
 
         return channel.getId();
     }
