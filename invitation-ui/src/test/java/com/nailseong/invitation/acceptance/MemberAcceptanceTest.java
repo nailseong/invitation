@@ -16,10 +16,12 @@ class MemberAcceptanceTest extends AcceptanceTest {
     @DisplayName("회원가입 기능이")
     class Signup {
 
+        private static final String URL = "/api/members";
+
         private void signup(final String username) {
             final var request = new SignupRequest(username);
 
-            url("/api/members")
+            url(URL)
                     .body(request)
                     .method(POST)
                     .send();
@@ -36,7 +38,7 @@ class MemberAcceptanceTest extends AcceptanceTest {
                 final var request = new SignupRequest("ilseong");
 
                 // when
-                final var response = url("/api/members")
+                final var response = url(URL)
                         .body(request)
                         .method(POST)
                         .send();
@@ -60,7 +62,7 @@ class MemberAcceptanceTest extends AcceptanceTest {
                 final var request = new SignupRequest(username);
 
                 // when
-                final var response = url("/api/members")
+                final var response = url(URL)
                         .body(request)
                         .method(POST)
                         .send();
