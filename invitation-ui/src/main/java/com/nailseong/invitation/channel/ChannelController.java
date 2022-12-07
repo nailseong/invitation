@@ -26,7 +26,7 @@ public class ChannelController {
     public ResponseEntity<Void> createChannel(@RequestBody @Valid final CreateChannelRequest request,
                                               @Verified final LoginSession loginSession) {
         final Long channelId = channelService.createChannel(
-                loginSession.getMemberId(),
+                loginSession.memberId(),
                 request.nickname(),
                 request.maxPeople()
         );
