@@ -50,7 +50,7 @@ public class Invitation extends BaseEntity {
         return expireAfter;
     }
 
-    public void setExpireAfter(final LocalDateTime expireAfter, final LocalDateTime now) {
+    private void setExpireAfter(final LocalDateTime expireAfter, final LocalDateTime now) {
         if (expireAfter.isBefore(now)) {
             throw new InvalidExpireAfterException();
         }
@@ -61,7 +61,7 @@ public class Invitation extends BaseEntity {
         return maxUses;
     }
 
-    public void setMaxUses(final int maxUses) {
+    private void setMaxUses(final int maxUses) {
         if (maxUses < MIN_MAX_USES) {
             throw new InvalidMaxUsesException();
         }
@@ -76,7 +76,7 @@ public class Invitation extends BaseEntity {
         return code;
     }
 
-    public void setCode(final String code) {
+    private void setCode(final String code) {
         if (code.length() != CODE_LENGTH) {
             throw new InvalidCodeException();
         }
