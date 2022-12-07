@@ -1,14 +1,12 @@
-package com.nailseong.invitation.invitation;
+package com.nailseong.invitation.invitation.appilication.domain;
 
 import com.nailseong.invitation.config.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "invitation")
-public class InvitationEntity extends BaseEntity {
+public class Invitation extends BaseEntity {
 
     private static final int INITIAL_NUMBER_OF_USES = 0;
 
@@ -24,19 +22,19 @@ public class InvitationEntity extends BaseEntity {
     @Column(nullable = false)
     private int numberOfUses;
 
-    protected InvitationEntity() {
+    protected Invitation() {
     }
 
-    private InvitationEntity(final Long channelId, final LocalDateTime expireAfter, final int maxUses,
-                             final int numberOfUses) {
+    private Invitation(final Long channelId, final LocalDateTime expireAfter, final int maxUses,
+                       final int numberOfUses) {
         this.channelId = channelId;
         this.expireAfter = expireAfter;
         this.maxUses = maxUses;
         this.numberOfUses = numberOfUses;
     }
 
-    public static InvitationEntity of(final Long channelId, final LocalDateTime expireAfter, final int maxUses) {
-        return new InvitationEntity(
+    public static Invitation of(final Long channelId, final LocalDateTime expireAfter, final int maxUses) {
+        return new Invitation(
                 channelId,
                 expireAfter,
                 maxUses,
