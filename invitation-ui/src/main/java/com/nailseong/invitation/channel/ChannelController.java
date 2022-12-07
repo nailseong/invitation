@@ -1,7 +1,7 @@
 package com.nailseong.invitation.channel;
 
-import com.nailseong.invitation.authentication.annotation.Verified;
-import com.nailseong.invitation.authentication.domain.LoginSession;
+import com.nailseong.invitation.authentication.support.Verified;
+import com.nailseong.invitation.authentication.support.LoginSession;
 import com.nailseong.invitation.channel.application.ChannelService;
 import com.nailseong.invitation.channel.dto.CreateChannelRequest;
 import jakarta.validation.Valid;

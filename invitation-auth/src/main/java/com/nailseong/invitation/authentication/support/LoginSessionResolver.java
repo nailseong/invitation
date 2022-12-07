@@ -1,7 +1,5 @@
-package com.nailseong.invitation.authentication;
+package com.nailseong.invitation.authentication.support;
 
-import com.nailseong.invitation.authentication.annotation.Verified;
-import com.nailseong.invitation.authentication.domain.LoginSession;
 import com.nailseong.invitation.authentication.exception.SessionExpireException;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.core.MethodParameter;

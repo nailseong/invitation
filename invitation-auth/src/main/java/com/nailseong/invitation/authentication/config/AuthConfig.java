@@ -1,6 +1,6 @@
 package com.nailseong.invitation.authentication.config;
 
-import com.nailseong.invitation.authentication.LoginSessionResolver;
+import com.nailseong.invitation.authentication.support.LoginSessionResolver;
 import java.util.List;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;

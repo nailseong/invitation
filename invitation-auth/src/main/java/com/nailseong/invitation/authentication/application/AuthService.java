@@ -1,6 +1,6 @@
 package com.nailseong.invitation.authentication.application;
 
-import com.nailseong.invitation.authentication.domain.LoginSession;
+import com.nailseong.invitation.authentication.support.LoginSession;
 import com.nailseong.invitation.member.domain.Member;
 import com.nailseong.invitation.member.domain.MemberRepository;
 import com.nailseong.invitation.member.exception.MemberNotFoundException;

@@ -1,7 +1,7 @@
 package com.nailseong.invitation.authentication.presentation;
 
 import com.nailseong.invitation.authentication.application.AuthService;
-import com.nailseong.invitation.authentication.domain.LoginSession;
+import com.nailseong.invitation.authentication.support.LoginSession;
 import com.nailseong.invitation.authentication.presentation.dto.LoginRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;

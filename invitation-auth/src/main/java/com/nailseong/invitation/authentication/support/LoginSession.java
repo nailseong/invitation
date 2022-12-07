@@ -1,4 +1,4 @@
-package com.nailseong.invitation.authentication.domain;
+package com.nailseong.invitation.authentication.support;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;

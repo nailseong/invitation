@@ -1,4 +1,4 @@
-package com.nailseong.invitation.authentication.annotation;
+package com.nailseong.invitation.authentication.support;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
