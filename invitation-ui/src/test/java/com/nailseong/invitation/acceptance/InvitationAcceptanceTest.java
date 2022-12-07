@@ -8,6 +8,7 @@ import static org.springframework.http.HttpStatus.OK;
 
 import com.nailseong.invitation.invitation.dto.CreateInvitationRequest;
 import java.time.LocalDateTime;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -19,6 +20,16 @@ class InvitationAcceptanceTest extends AcceptanceTest {
     @DisplayName("초대장 생성 기능이")
     class Create {
 
+        private String sessionId;
+        private Long channelId;
+
+        @BeforeEach
+        void setUp() {
+            signup(USERNAME);
+            sessionId = login(USERNAME);
+            channelId = createChannel(sessionId);
+        }
+
         private static final String URL = "/api/invitations";
         private static final String USERNAME = "ilseong";
         private static final String HOST = "https://invitation.nailseong.com/";
@@ -27,10 +38,6 @@ class InvitationAcceptanceTest extends AcceptanceTest {
         @DisplayName("성공한다.")
         void success() {
             // given
-            signup(USERNAME);
-            final String sessionId = login(USERNAME);
-            final Long channelId = createChannel(sessionId);
-
             final var request = new CreateInvitationRequest(channelId, LocalDateTime.now().plusDays(1L), 2);
 
             // when
@@ -53,10 +60,6 @@ class InvitationAcceptanceTest extends AcceptanceTest {
             @DisplayName("최대 사용 횟수가 1미만인 경우이다.")
             void invalidMaxUses() {
                 // given
-                signup(USERNAME);
-                final String sessionId = login(USERNAME);
-                final Long channelId = createChannel(sessionId);
-
                 final var request = new CreateInvitationRequest(channelId, LocalDateTime.now().plusDays(1L), 0);
 
                 // when
@@ -70,13 +73,9 @@ class InvitationAcceptanceTest extends AcceptanceTest {
             }
 
             @Test
-            @DisplayName("만료 기간이 현재보다 과건인 경우이다.")
+            @DisplayName("만료 기간이 현재보다 과거인 경우이다.")
             void invalidExpireAfter() {
                 // given
-                signup(USERNAME);
-                final String sessionId = login(USERNAME);
-                final Long channelId = createChannel(sessionId);
-
                 final var request = new CreateInvitationRequest(channelId, LocalDateTime.now().minusDays(1L), 2);
 
                 // when
@@ -93,10 +92,6 @@ class InvitationAcceptanceTest extends AcceptanceTest {
             @DisplayName("채널에 방장이 아닌 사용자가 요청한 경우이다.")
             void notHost() {
                 // given
-                signup(USERNAME);
-                final String sessionId = login(USERNAME);
-                final Long channelId = createChannel(sessionId);
-
                 final String guestUsername = "not-host";
                 signup(guestUsername);
                 final String guestSessionId = login(guestUsername);
