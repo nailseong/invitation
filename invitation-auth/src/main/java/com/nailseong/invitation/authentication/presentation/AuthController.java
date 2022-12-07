@@ -17,14 +17,16 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
 
     private final AuthService authService;
+    private final HttpSession session;
 
-    public AuthController(final AuthService authService) {
+    public AuthController(final AuthService authService, final HttpSession session) {
         this.authService = authService;
+        this.session = session;
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PostMapping("/login")
-    public void login(@RequestBody @Valid final LoginRequest request, final HttpSession session) {
+    public void login(@RequestBody @Valid final LoginRequest request) {
         final LoginSession loginSession = authService.login(request.username());
         session.setAttribute("loginSession", loginSession);
     }
