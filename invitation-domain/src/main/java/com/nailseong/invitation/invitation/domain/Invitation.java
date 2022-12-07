@@ -1,6 +1,7 @@
 package com.nailseong.invitation.invitation.domain;
 
 import com.nailseong.invitation.config.BaseEntity;
+import com.nailseong.invitation.invitation.exception.InvalidCodeException;
 import com.nailseong.invitation.invitation.exception.InvalidExpireAfterException;
 import com.nailseong.invitation.invitation.exception.InvalidMaxUsesException;
 import jakarta.persistence.Column;
@@ -12,6 +13,7 @@ public class Invitation extends BaseEntity {
 
     private static final int INITIAL_NUMBER_OF_USES = 0;
     private static final int MIN_MAX_USES = 1;
+    public static final int CODE_LENGTH = 6;
 
     @Column(nullable = false)
     private Long channelId;
@@ -32,17 +34,12 @@ public class Invitation extends BaseEntity {
     }
 
     public Invitation(final Long channelId, final LocalDateTime expireAfter, final LocalDateTime now,
-                      final int maxUses) {
+                      final int maxUses, final String code) {
         this.channelId = channelId;
         setExpireAfter(expireAfter, now);
         setMaxUses(maxUses);
         this.numberOfUses = INITIAL_NUMBER_OF_USES;
-        this.code = generateCode();
-    }
-
-    public String generateCode() {
-        // TODO: 2022/12/08 숫자, 영어 대소문자로 구성된 6자리 문자열을 랜덤으로 생성한다.
-        return "x";
+        setCode(code);
     }
 
     public Long getChannelId() {
@@ -77,5 +74,12 @@ public class Invitation extends BaseEntity {
 
     public String getCode() {
         return code;
+    }
+
+    public void setCode(final String code) {
+        if (code.length() != CODE_LENGTH) {
+            throw new InvalidCodeException();
+        }
+        this.code = code;
     }
 }

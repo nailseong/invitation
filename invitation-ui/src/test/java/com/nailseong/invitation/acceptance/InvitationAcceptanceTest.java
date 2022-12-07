@@ -1,6 +1,7 @@
 package com.nailseong.invitation.acceptance;
 
 import static io.restassured.http.Method.POST;
+import static org.hamcrest.Matchers.hasLength;
 import static org.hamcrest.Matchers.startsWith;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.OK;
@@ -20,6 +21,7 @@ class InvitationAcceptanceTest extends AcceptanceTest {
 
         private static final String URL = "/api/invitations";
         private static final String USERNAME = "ilseong";
+        private static final String HOST = "https://invitation.nailseong.com/";
 
         @Test
         @DisplayName("성공한다.")
@@ -39,7 +41,8 @@ class InvitationAcceptanceTest extends AcceptanceTest {
 
             // then
             response.statusCode(OK.value())
-                    .body("invitationUrl", startsWith("https://invitation.nailseong.com/"));
+                    .body("invitationUrl", startsWith(HOST))
+                    .body("invitationUrl", hasLength(HOST.length() + 6));
         }
 
         @Nested
