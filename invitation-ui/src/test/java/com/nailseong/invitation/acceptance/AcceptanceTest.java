@@ -2,6 +2,7 @@ package com.nailseong.invitation.acceptance;
 
 import static io.restassured.http.Method.POST;
 
+import com.nailseong.invitation.authentication.presentation.dto.LoginRequest;
 import com.nailseong.invitation.member.dto.SignupRequest;
 import com.nailseong.invitation.util.DatabaseCleaner;
 import io.restassured.RestAssured;
@@ -30,11 +31,20 @@ abstract class AcceptanceTest {
 
     protected void signup(final String username) {
         final var request = new SignupRequest(username);
-
         url("/api/members")
                 .body(request)
                 .method(POST)
-                .send();
+                .sendWithoutLog();
+    }
+
+    protected String login(final String username) {
+        final var request = new LoginRequest(username);
+        return url("/api/auth/login")
+                .body(request)
+                .method(POST)
+                .send()
+                .extract()
+                .cookie("SESSION");
     }
 
     protected UrlBuilder url(final String url) {
@@ -64,6 +74,25 @@ abstract class AcceptanceTest {
                     .when()
                     .request(method, url)
                     .then().log().all();
+        }
+
+        public ValidatableResponse send(final String sessionId) {
+            return RestAssured.given().log().all()
+                    .body(body)
+                    .contentType(MediaType.APPLICATION_JSON_VALUE)
+                    .cookie("SESSION", sessionId)
+                    .when()
+                    .request(method, url)
+                    .then().log().all();
+        }
+
+        public ValidatableResponse sendWithoutLog() {
+            return RestAssured.given()
+                    .body(body)
+                    .contentType(MediaType.APPLICATION_JSON_VALUE)
+                    .when()
+                    .request(method, url)
+                    .then();
         }
     }
 }

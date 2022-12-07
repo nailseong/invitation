@@ -2,7 +2,6 @@ package com.nailseong.invitation.acceptance;
 
 import static io.restassured.http.Method.POST;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
-import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 import com.nailseong.invitation.channel.dto.CreateChannelRequest;
 import org.junit.jupiter.api.DisplayName;
@@ -25,13 +24,14 @@ class ChannelAcceptanceTest extends AcceptanceTest {
         void success() {
             // given
             signup("ilseong");
-            final var request = new CreateChannelRequest(1L, "rick", 2);
+            final String sessionId = login("ilseong");
+            final var request = new CreateChannelRequest("rick", 2);
 
             // when
             final var response = url(URL)
                     .body(request)
                     .method(POST)
-                    .send();
+                    .send(sessionId);
 
             // then
             response.statusCode(HttpStatus.CREATED.value())
@@ -47,32 +47,17 @@ class ChannelAcceptanceTest extends AcceptanceTest {
             void invalidMaxPeople() {
                 // given
                 signup("ilseong");
-                final var request = new CreateChannelRequest(1L, "rick", 1);
+                final String sessionId = login("ilseong");
+                final var request = new CreateChannelRequest("rick", 1);
 
                 // when
                 final var response = url(URL)
                         .body(request)
                         .method(POST)
-                        .send();
+                        .send(sessionId);
 
                 // then
                 response.statusCode(BAD_REQUEST.value());
-            }
-
-            @Test
-            @DisplayName("사용자가 존재하지 않는 경우이다.")
-            void notExistMember() {
-                // given
-                final var request = new CreateChannelRequest(999L, "rick", 2);
-
-                // when
-                final var response = url(URL)
-                        .body(request)
-                        .method(POST)
-                        .send();
-
-                // then
-                response.statusCode(NOT_FOUND.value());
             }
         }
     }

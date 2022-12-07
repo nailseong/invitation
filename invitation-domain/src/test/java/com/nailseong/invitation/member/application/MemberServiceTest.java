@@ -6,8 +6,8 @@ import static org.mockito.Mockito.eq;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-import com.nailseong.invitation.member.MemberEntity;
-import com.nailseong.invitation.member.MemberRepository;
+import com.nailseong.invitation.member.domain.Member;
+import com.nailseong.invitation.member.domain.MemberRepository;
 import com.nailseong.invitation.member.exception.DuplicateUsernameException;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,7 +19,7 @@ import org.mockito.MockitoAnnotations;
 class MemberServiceTest {
 
     private static final String USERNAME = "ilseong";
-    private static final MemberEntity MEMBER_ENTITY = new MemberEntity(USERNAME);
+    private static final Member MEMBER_ENTITY = new Member(USERNAME);
 
     @Mock
     private MemberRepository memberRepo;

@@ -33,7 +33,6 @@ public abstract class BaseEntity {
     }
 
     public LocalDateTime getCreatedAt() {
-        System.out.println("createdAt = " + createdAt);
         return createdAt;
     }
 
