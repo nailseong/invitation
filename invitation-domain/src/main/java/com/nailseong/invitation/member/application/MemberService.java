@@ -1,7 +1,7 @@
 package com.nailseong.invitation.member.application;
 
-import com.nailseong.invitation.member.MemberEntity;
-import com.nailseong.invitation.member.MemberRepository;
+import com.nailseong.invitation.member.domain.Member;
+import com.nailseong.invitation.member.domain.MemberRepository;
 import com.nailseong.invitation.member.domain.LoginSession;
 import com.nailseong.invitation.member.domain.LoginSessionRepository;
 import com.nailseong.invitation.member.exception.DuplicateUsernameException;
@@ -27,7 +27,7 @@ public class MemberService {
                 .ifPresent(it -> {
                     throw new DuplicateUsernameException();
                 });
-        final MemberEntity entity = new MemberEntity(username);
+        final Member entity = new Member(username);
         memberRepo.save(entity);
     }
 

@@ -1,21 +1,19 @@
-package com.nailseong.invitation.member;
+package com.nailseong.invitation.member.domain;
 
 import com.nailseong.invitation.config.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "member")
-public class MemberEntity extends BaseEntity {
+public class Member extends BaseEntity {
 
     @Column(nullable = false)
     private String username;
 
-    protected MemberEntity() {
+    protected Member() {
     }
 
-    public MemberEntity(final String username) {
+    public Member(final String username) {
         this.username = username;
     }
 

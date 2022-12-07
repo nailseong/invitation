@@ -4,7 +4,7 @@ import com.nailseong.invitation.channel.domain.Channel;
 import com.nailseong.invitation.channel.domain.ChannelMember;
 import com.nailseong.invitation.channel.domain.ChannelMemberRepository;
 import com.nailseong.invitation.channel.domain.ChannelRepository;
-import com.nailseong.invitation.member.MemberRepository;
+import com.nailseong.invitation.member.domain.MemberRepository;
 import com.nailseong.invitation.member.exception.MemberNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
