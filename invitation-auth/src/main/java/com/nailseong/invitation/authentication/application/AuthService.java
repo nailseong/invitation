@@ -9,12 +9,12 @@ import java.time.LocalDateTime;
 import org.springframework.stereotype.Service;
 
 @Service
-public class authService {
+public class AuthService {
 
     private final MemberRepository memberRepo;
     private final LoginSessionRepository loginSessionRepo;
 
-    public authService(final MemberRepository memberRepo, final LoginSessionRepository loginSessionRepo) {
+    public AuthService(final MemberRepository memberRepo, final LoginSessionRepository loginSessionRepo) {
         this.memberRepo = memberRepo;
         this.loginSessionRepo = loginSessionRepo;
     }
