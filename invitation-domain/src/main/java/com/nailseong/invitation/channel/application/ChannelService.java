@@ -26,6 +26,7 @@ public class ChannelService {
     }
 
     public Long createChannel(final Long memberId, final String nickname, final int maxPeople) {
+        // TODO: 2022/12/08 사용자 유효성 검사 로직을 분리한다.
         memberRepo.findById(memberId)
                 .orElseThrow(MemberNotFoundException::new);
         final Channel channel = channelRepo.save(Channel.ofNew(memberId, maxPeople));

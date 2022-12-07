@@ -1,6 +1,8 @@
 package com.nailseong.invitation.invitation.domain;
 
 import com.nailseong.invitation.config.BaseEntity;
+import com.nailseong.invitation.invitation.exception.InvalidExpireAfterException;
+import com.nailseong.invitation.invitation.exception.InvalidMaxUsesException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import java.time.LocalDateTime;
@@ -9,6 +11,7 @@ import java.time.LocalDateTime;
 public class Invitation extends BaseEntity {
 
     private static final int INITIAL_NUMBER_OF_USES = 0;
+    private static final int MIN_MAX_USES = 1;
 
     @Column(nullable = false)
     private Long channelId;
@@ -22,24 +25,24 @@ public class Invitation extends BaseEntity {
     @Column(nullable = false)
     private int numberOfUses;
 
+    @Column(nullable = false)
+    private String code;
+
     protected Invitation() {
     }
 
-    private Invitation(final Long channelId, final LocalDateTime expireAfter, final int maxUses,
-                       final int numberOfUses) {
+    public Invitation(final Long channelId, final LocalDateTime expireAfter, final LocalDateTime now,
+                      final int maxUses) {
         this.channelId = channelId;
-        this.expireAfter = expireAfter;
-        this.maxUses = maxUses;
-        this.numberOfUses = numberOfUses;
+        setExpireAfter(expireAfter, now);
+        setMaxUses(maxUses);
+        this.numberOfUses = INITIAL_NUMBER_OF_USES;
+        this.code = generateCode();
     }
 
-    public static Invitation of(final Long channelId, final LocalDateTime expireAfter, final int maxUses) {
-        return new Invitation(
-                channelId,
-                expireAfter,
-                maxUses,
-                INITIAL_NUMBER_OF_USES
-        );
+    public String generateCode() {
+        // TODO: 2022/12/08 숫자, 영어 대소문자로 구성된 6자리 문자열을 랜덤으로 생성한다.
+        return "x";
     }
 
     public Long getChannelId() {
@@ -50,11 +53,29 @@ public class Invitation extends BaseEntity {
         return expireAfter;
     }
 
+    public void setExpireAfter(final LocalDateTime expireAfter, final LocalDateTime now) {
+        if (expireAfter.isBefore(now)) {
+            throw new InvalidExpireAfterException();
+        }
+        this.expireAfter = expireAfter;
+    }
+
     public int getMaxUses() {
         return maxUses;
     }
 
+    public void setMaxUses(final int maxUses) {
+        if (maxUses < MIN_MAX_USES) {
+            throw new InvalidMaxUsesException();
+        }
+        this.maxUses = maxUses;
+    }
+
     public int getNumberOfUses() {
         return numberOfUses;
+    }
+
+    public String getCode() {
+        return code;
     }
 }
