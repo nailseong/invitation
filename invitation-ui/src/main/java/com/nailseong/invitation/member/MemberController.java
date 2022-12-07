@@ -1,6 +1,7 @@
 package com.nailseong.invitation.member;
 
 import com.nailseong.invitation.member.application.MemberService;
+import com.nailseong.invitation.member.dto.LoginRequest;
 import com.nailseong.invitation.member.dto.SignupRequest;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -24,5 +25,11 @@ public class MemberController {
     @PostMapping
     public void signup(@RequestBody @Valid final SignupRequest request) {
         memberService.signup(request.username());
+    }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PostMapping("/login")
+    public void login(@RequestBody @Valid final LoginRequest request) {
+        memberService.login(request.username());
     }
 }
