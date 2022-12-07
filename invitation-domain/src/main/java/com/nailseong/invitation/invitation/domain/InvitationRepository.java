@@ -1,4 +1,4 @@
-package com.nailseong.invitation.invitation.appilication.domain;
+package com.nailseong.invitation.invitation.domain;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
