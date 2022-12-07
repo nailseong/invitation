@@ -2,6 +2,7 @@ package com.nailseong.invitation.invitation;
 
 import com.nailseong.invitation.authentication.support.LoginSession;
 import com.nailseong.invitation.authentication.support.Verified;
+import com.nailseong.invitation.channel.support.ChannelAndMember;
 import com.nailseong.invitation.invitation.application.InvitationService;
 import com.nailseong.invitation.invitation.application.dto.InvitationInfo;
 import com.nailseong.invitation.invitation.dto.CreateInvitationRequest;
@@ -26,17 +27,15 @@ public class InvitationController {
     }
 
     @PostMapping
-    public CreateInvitationResponse createInvitation(
-            @RequestBody @Valid final CreateInvitationRequest request,
-            @Verified final LoginSession loginSession) {
+    public CreateInvitationResponse createInvitation(@RequestBody @Valid final CreateInvitationRequest request,
+                                                     @Verified final LoginSession loginSession) {
         final InvitationInfo invitationInfo = new InvitationInfo(
-                request.channelId(),
                 request.expireAfter(),
                 LocalDateTime.now(),
-                request.maxUses(),
-                loginSession.memberId()
+                request.maxUses()
         );
-        final String invitationCode = invitationService.createInvitation(invitationInfo);
+        final ChannelAndMember channelAndMember = new ChannelAndMember(request.channelId(), loginSession.memberId());
+        final String invitationCode = invitationService.createInvitation(invitationInfo, channelAndMember);
         return new CreateInvitationResponse(HOST + invitationCode);
     }
 }
