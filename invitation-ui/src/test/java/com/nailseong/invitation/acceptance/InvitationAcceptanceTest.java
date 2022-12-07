@@ -1,9 +1,9 @@
 package com.nailseong.invitation.acceptance;
 
 import static io.restassured.http.Method.POST;
-import static org.springframework.http.HttpHeaders.LOCATION;
+import static org.hamcrest.Matchers.startsWith;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
-import static org.springframework.http.HttpStatus.CREATED;
+import static org.springframework.http.HttpStatus.OK;
 
 import com.nailseong.invitation.invitation.dto.CreateInvitationRequest;
 import java.time.LocalDateTime;
@@ -27,7 +27,9 @@ class InvitationAcceptanceTest extends AcceptanceTest {
             // given
             signup(USERNAME);
             final String sessionId = login(USERNAME);
-            final var request = "";
+            final Long channelId = createChannel(sessionId);
+
+            final var request = new CreateInvitationRequest(channelId, LocalDateTime.now().plusDays(1L), 2);
 
             // when
             final var response = url(URL)
@@ -36,8 +38,8 @@ class InvitationAcceptanceTest extends AcceptanceTest {
                     .send(sessionId);
 
             // then
-            response.statusCode(CREATED.value())
-                    .header(LOCATION, "/api/invitations/1");
+            response.statusCode(OK.value())
+                    .body("invitationUrl", startsWith("https://invitation.nailseong.com/"));
         }
 
         @Nested

@@ -7,8 +7,7 @@ import com.nailseong.invitation.invitation.application.dto.InvitationInfo;
 import com.nailseong.invitation.invitation.dto.CreateInvitationRequest;
 import com.nailseong.invitation.invitation.dto.CreateInvitationResponse;
 import jakarta.validation.Valid;
-import java.net.URI;
-import org.springframework.http.ResponseEntity;
+import java.time.LocalDateTime;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,18 +26,17 @@ public class InvitationController {
     }
 
     @PostMapping
-    public ResponseEntity<CreateInvitationResponse> createInvitation(
+    public CreateInvitationResponse createInvitation(
             @RequestBody @Valid final CreateInvitationRequest request,
             @Verified final LoginSession loginSession) {
         final InvitationInfo invitationInfo = new InvitationInfo(
                 request.channelId(),
                 request.expireAfter(),
+                LocalDateTime.now(),
                 request.maxUses(),
                 loginSession.memberId()
         );
         final String invitationCode = invitationService.createInvitation(invitationInfo);
-        final CreateInvitationResponse response = new CreateInvitationResponse(HOST + invitationCode);
-        return ResponseEntity.created(URI.create("/api/invitations/" + 1L))
-                .body(response);
+        return new CreateInvitationResponse(HOST + invitationCode);
     }
 }
