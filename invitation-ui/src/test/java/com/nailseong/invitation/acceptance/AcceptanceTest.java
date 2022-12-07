@@ -1,8 +1,10 @@
 package com.nailseong.invitation.acceptance;
 
 import static io.restassured.http.Method.POST;
+import static org.springframework.http.HttpHeaders.LOCATION;
 
 import com.nailseong.invitation.authentication.presentation.dto.LoginRequest;
+import com.nailseong.invitation.channel.dto.CreateChannelRequest;
 import com.nailseong.invitation.member.dto.SignupRequest;
 import com.nailseong.invitation.util.DatabaseCleaner;
 import io.restassured.RestAssured;
@@ -42,9 +44,20 @@ abstract class AcceptanceTest {
         return url("/api/auth/login")
                 .body(request)
                 .method(POST)
-                .send()
+                .sendWithoutLog()
                 .extract()
                 .cookie("SESSION");
+    }
+
+    protected Long createChannel(final String sessionId) {
+        final var request = new CreateChannelRequest("rick", 2);
+        return Long.valueOf(url("/api/channels")
+                .body(request)
+                .method(POST)
+                .sendWithoutLog(sessionId)
+                .extract()
+                .header(LOCATION)
+                .split("/")[3]);
     }
 
     protected UrlBuilder url(final String url) {
@@ -90,6 +103,16 @@ abstract class AcceptanceTest {
             return RestAssured.given()
                     .body(body)
                     .contentType(MediaType.APPLICATION_JSON_VALUE)
+                    .when()
+                    .request(method, url)
+                    .then();
+        }
+
+        public ValidatableResponse sendWithoutLog(final String sessionId) {
+            return RestAssured.given()
+                    .body(body)
+                    .contentType(MediaType.APPLICATION_JSON_VALUE)
+                    .cookie("SESSION", sessionId)
                     .when()
                     .request(method, url)
                     .then();

@@ -13,11 +13,11 @@ import org.springframework.http.HttpStatus;
 @DisplayName("채널 인수 테스트")
 class ChannelAcceptanceTest extends AcceptanceTest {
 
-    private static final String URL = "/api/channels";
-
     @Nested
     @DisplayName("채널 생성 기능이")
     class Create {
+
+        private static final String URL = "/api/channels";
 
         @Test
         @DisplayName("성공한다.")

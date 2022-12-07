@@ -39,6 +39,10 @@ public class Channel extends BaseEntity {
         );
     }
 
+    public boolean isHost(final Long memberId) {
+        return hostId.equals(memberId);
+    }
+
     public Long getHostId() {
         return hostId;
     }
