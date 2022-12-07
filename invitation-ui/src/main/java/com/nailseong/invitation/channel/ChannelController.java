@@ -1,5 +1,7 @@
 package com.nailseong.invitation.channel;
 
+import com.nailseong.invitation.authentication.annotation.Verified;
+import com.nailseong.invitation.authentication.domain.LoginSession;
 import com.nailseong.invitation.channel.application.ChannelService;
 import com.nailseong.invitation.channel.dto.CreateChannelRequest;
 import jakarta.validation.Valid;
@@ -21,9 +23,10 @@ public class ChannelController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> createChannel(@RequestBody @Valid final CreateChannelRequest request) {
+    public ResponseEntity<Void> createChannel(@RequestBody @Valid final CreateChannelRequest request,
+                                              @Verified final LoginSession loginSession) {
         final Long channelId = channelService.createChannel(
-                request.memberId(),
+                loginSession.getMemberId(),
                 request.nickname(),
                 request.maxPeople()
         );
