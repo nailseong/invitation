@@ -1,4 +1,4 @@
-package com.nailseong.invitation.presentation.member.dto;
+package com.nailseong.invitation.member.dto;
 
 import jakarta.validation.constraints.NotEmpty;
 

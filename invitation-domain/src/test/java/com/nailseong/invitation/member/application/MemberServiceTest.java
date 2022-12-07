@@ -46,7 +46,7 @@ class MemberServiceTest {
 
     @Test
     @DisplayName("회원가입 실패 - 사용자 이름 중복")
-    void signup_duplicate_username() {
+    void signup_duplicateUsername() {
         given(memberRepo.findByUsername(USERNAME))
                 .willReturn(Optional.of(MEMBER_ENTITY));
 

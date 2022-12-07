@@ -1,7 +1,7 @@
-package com.nailseong.invitation.presentation.member;
+package com.nailseong.invitation.member;
 
 import com.nailseong.invitation.member.application.MemberService;
-import com.nailseong.invitation.presentation.member.dto.SignupRequest;
+import com.nailseong.invitation.member.dto.SignupRequest;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,7 +20,7 @@ public class MemberController {
         this.memberService = memberService;
     }
 
-    @ResponseStatus(value = HttpStatus.CREATED)
+    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     public void signup(@RequestBody @Valid final SignupRequest request) {
         memberService.signup(request.username());
