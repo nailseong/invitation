@@ -1,4 +1,4 @@
-package com.nailseong.invitation.member.domain;
+package com.nailseong.invitation.authentication.domain;
 
 import org.springframework.data.repository.CrudRepository;
 
