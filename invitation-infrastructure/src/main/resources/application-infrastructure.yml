@@ -6,6 +6,13 @@ spring:
     username: sa
     password:
 
+# Redis
+  session :
+    storage-type : redis
+  redis:
+    host: localhost
+    port: 6379
+
 # JPA
   jpa:
     show-sql: false
