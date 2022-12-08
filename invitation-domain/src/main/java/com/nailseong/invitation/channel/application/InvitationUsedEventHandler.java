@@ -1,8 +1,11 @@
 package com.nailseong.invitation.channel.application;
 
+import com.nailseong.invitation.channel.domain.Channel;
 import com.nailseong.invitation.channel.domain.ChannelMember;
 import com.nailseong.invitation.channel.domain.ChannelMemberRepository;
+import com.nailseong.invitation.channel.domain.ChannelRepository;
 import com.nailseong.invitation.channel.exception.AlreadyJoinException;
+import com.nailseong.invitation.channel.exception.ChannelNotFoundException;
 import com.nailseong.invitation.channel.exception.DuplicateNicknameException;
 import com.nailseong.invitation.invitation.domain.InvitationUsedEvent;
 import java.util.List;
@@ -12,15 +15,21 @@ import org.springframework.stereotype.Service;
 @Service
 public class InvitationUsedEventHandler {
 
+    private final ChannelRepository channelRepo;
     private final ChannelMemberRepository channelMemberRepo;
 
-    public InvitationUsedEventHandler(final ChannelMemberRepository channelMemberRepo) {
+    public InvitationUsedEventHandler(final ChannelRepository channelRepo,
+                                      final ChannelMemberRepository channelMemberRepo) {
+        this.channelRepo = channelRepo;
         this.channelMemberRepo = channelMemberRepo;
     }
 
     @EventListener(InvitationUsedEvent.class)
     public void handle(final InvitationUsedEvent event) {
-        // TODO: 2022/12/09 if not enough left people in channel throw exception 
+        final Channel channel = channelRepo.findById(event.getChannelId())
+                .orElseThrow(ChannelNotFoundException::new);
+        channel.join();
+
         final List<ChannelMember> channelMembers = channelMemberRepo.findAllByChannelId(event.getChannelId());
         if (isJoinedGuest(channelMembers, event.getGuestId())) {
             throw new AlreadyJoinException();

@@ -10,6 +10,7 @@ import static org.springframework.http.HttpStatus.OK;
 
 import com.nailseong.invitation.channel.exception.AlreadyJoinException;
 import com.nailseong.invitation.channel.exception.DuplicateNicknameException;
+import com.nailseong.invitation.channel.exception.NoLeftPeopleException;
 import com.nailseong.invitation.channel.exception.NotHostException;
 import com.nailseong.invitation.invitation.dto.CreateInvitationRequest;
 import com.nailseong.invitation.invitation.dto.UseInvitationRequest;
@@ -38,7 +39,7 @@ class InvitationAcceptanceTest extends AcceptanceTest {
         super.setUp();
         signup(USERNAME);
         sessionId = login(USERNAME);
-        channelId = createChannel(sessionId);
+        channelId = createChannel(sessionId, 5);
     }
 
     @Nested
@@ -131,6 +132,7 @@ class InvitationAcceptanceTest extends AcceptanceTest {
     class Use {
 
         private static final String URL_PREFIX = "/api/invitations/";
+        private static final String NICKNAME = "nailseong";
 
         private String guestSessionId;
 
@@ -145,7 +147,7 @@ class InvitationAcceptanceTest extends AcceptanceTest {
         void success() {
             // given
             final String invitationCode = createInvitation(sessionId, channelId, LocalDateTime.now().plusDays(1));
-            final var request = new UseInvitationRequest("nailseong");
+            final var request = new UseInvitationRequest(NICKNAME);
 
             // when
             final var response = url(URL_PREFIX + invitationCode)
@@ -165,7 +167,7 @@ class InvitationAcceptanceTest extends AcceptanceTest {
             @DisplayName("초대장에 해당하는 채널이 존재하지 않는 경우이다.")
             void notExistChannel() {
                 // given
-                final var request = new UseInvitationRequest("nailseong");
+                final var request = new UseInvitationRequest(NICKNAME);
 
                 // when
                 final var response = url(URL_PREFIX + "x0x0X0")
@@ -184,7 +186,7 @@ class InvitationAcceptanceTest extends AcceptanceTest {
                 // given
                 final LocalDateTime expireAfter = LocalDateTime.now().plusSeconds(1L);
                 final String invitationCode = createInvitation(sessionId, channelId, expireAfter);
-                final var request = new UseInvitationRequest("nailseong");
+                final var request = new UseInvitationRequest(NICKNAME);
 
                 Thread.sleep(1100);
 
@@ -205,9 +207,9 @@ class InvitationAcceptanceTest extends AcceptanceTest {
                 // given
                 final LocalDateTime expireAfter = LocalDateTime.now().plusDays(1L);
                 final String invitationCode = createInvitation(sessionId, channelId, expireAfter);
-                final var request = new UseInvitationRequest("nailseong");
+                final var request = new UseInvitationRequest(NICKNAME);
 
-                useInvitation(guestSessionId, invitationCode);
+                useInvitation(guestSessionId, invitationCode, NICKNAME);
 
                 // when
                 final var response = url(URL_PREFIX + invitationCode)
@@ -226,9 +228,9 @@ class InvitationAcceptanceTest extends AcceptanceTest {
                 // given
                 final LocalDateTime expireAfter = LocalDateTime.now().plusDays(1L);
                 final String invitationCode = createInvitation(sessionId, channelId, expireAfter, 2);
-                final var request = new UseInvitationRequest("nailseong");
+                final var request = new UseInvitationRequest(NICKNAME);
 
-                useInvitation(guestSessionId, invitationCode);
+                useInvitation(guestSessionId, invitationCode, NICKNAME);
 
                 // when
                 final var response = url(URL_PREFIX + invitationCode)
@@ -247,9 +249,9 @@ class InvitationAcceptanceTest extends AcceptanceTest {
                 // given
                 final LocalDateTime expireAfter = LocalDateTime.now().plusDays(1L);
                 final String invitationCode = createInvitation(sessionId, channelId, expireAfter, 2);
-                final var request = new UseInvitationRequest("nailseong");
+                final var request = new UseInvitationRequest(NICKNAME);
 
-                useInvitation(guestSessionId, invitationCode);
+                useInvitation(guestSessionId, invitationCode, NICKNAME);
 
                 signup("rick2");
                 final String requestSessionId = login("rick2");
@@ -263,6 +265,32 @@ class InvitationAcceptanceTest extends AcceptanceTest {
                 // then
                 response.statusCode(BAD_REQUEST.value())
                         .body("message", is(DuplicateNicknameException.MESSAGE));
+            }
+
+            @Test
+            @DisplayName("남은 인원이 없는 경우이다.")
+            void leftPeople() {
+                // given
+                final Long channelId = createChannel(sessionId);
+                final LocalDateTime expireAfter = LocalDateTime.now().plusDays(1L);
+                final String invitationCode = createInvitation(sessionId, channelId, expireAfter, 2);
+
+                useInvitation(guestSessionId, invitationCode, NICKNAME);
+
+                final String requestNickname = "rick2";
+                signup(requestNickname);
+                final String requestSessionId = login(requestNickname);
+                final var request = new UseInvitationRequest(requestNickname);
+
+                // when
+                final var response = url(URL_PREFIX + invitationCode)
+                        .body(request)
+                        .method(POST)
+                        .send(requestSessionId);
+
+                // then
+                response.statusCode(BAD_REQUEST.value())
+                        .body("message", is(NoLeftPeopleException.MESSAGE));
             }
         }
     }

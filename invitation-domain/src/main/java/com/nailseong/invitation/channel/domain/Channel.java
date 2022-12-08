@@ -1,6 +1,7 @@
 package com.nailseong.invitation.channel.domain;
 
 import com.nailseong.invitation.channel.exception.InvalidMaxPeopleException;
+import com.nailseong.invitation.channel.exception.NoLeftPeopleException;
 import com.nailseong.invitation.config.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -37,6 +38,17 @@ public class Channel extends BaseEntity {
                 maxPeople,
                 INITIAL_NUMBER_OF_PEOPLE
         );
+    }
+
+    public void join() {
+        if (!hasLeftPeople()) {
+            throw new NoLeftPeopleException();
+        }
+        numberOfPeople++;
+    }
+
+    private boolean hasLeftPeople() {
+        return maxPeople > numberOfPeople;
     }
 
     public boolean isHost(final Long memberId) {

@@ -53,7 +53,11 @@ abstract class AcceptanceTest {
     }
 
     protected Long createChannel(final String sessionId) {
-        final var request = new CreateChannelRequest("rick", 2);
+        return createChannel(sessionId, 2);
+    }
+
+    protected Long createChannel(final String sessionId, final int maxPeople) {
+        final var request = new CreateChannelRequest("rick", maxPeople);
         return Long.valueOf(url("/api/channels")
                 .body(request)
                 .method(POST)
@@ -79,8 +83,8 @@ abstract class AcceptanceTest {
                 .split("https://invitation.nailseong.com/")[1];
     }
 
-    protected void useInvitation(final String sessionId, final String invitationCode) {
-        final var request = new UseInvitationRequest("nailseong");
+    protected void useInvitation(final String sessionId, final String invitationCode, final String nickname) {
+        final var request = new UseInvitationRequest(nickname);
         url("/api/invitations/" + invitationCode)
                 .body(request)
                 .method(POST)
