@@ -2,11 +2,13 @@ package com.nailseong.invitation.acceptance;
 
 import static io.restassured.http.Method.POST;
 import static org.hamcrest.Matchers.hasLength;
+import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.startsWith;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.NO_CONTENT;
 import static org.springframework.http.HttpStatus.OK;
 
+import com.nailseong.invitation.channel.exception.DuplicateNicknameException;
 import com.nailseong.invitation.invitation.dto.CreateInvitationRequest;
 import com.nailseong.invitation.invitation.dto.UseInvitationRequest;
 import java.time.LocalDateTime;
@@ -223,6 +225,30 @@ class InvitationAcceptanceTest extends AcceptanceTest {
 
                 // then
                 response.statusCode(BAD_REQUEST.value());
+            }
+
+            @Test
+            @DisplayName("닉네임이 중복되는 경우이다.")
+            void nickname() {
+                // given
+                final LocalDateTime expireAfter = LocalDateTime.now().plusDays(1L);
+                final String invitationCode = createInvitation(sessionId, channelId, expireAfter, 2);
+                final var request = new UseInvitationRequest("nailseong");
+
+                useInvitation(guestSessionId, invitationCode);
+
+                signup("rick2");
+                final String requestSessionId = login("rick2");
+
+                // when
+                final var response = url(URL_PREFIX + invitationCode)
+                        .body(request)
+                        .method(POST)
+                        .send(requestSessionId);
+
+                // then
+                response.statusCode(BAD_REQUEST.value())
+                        .body("message", is(DuplicateNicknameException.MESSAGE));
             }
         }
     }

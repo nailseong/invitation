@@ -54,6 +54,10 @@ public class ChannelMember extends BaseEntity {
         return this.memberId.equals(memberId);
     }
 
+    public boolean isSameNickname(final String nickname) {
+        return this.nickname.equals(nickname);
+    }
+
     public Long getChannelId() {
         return channelId;
     }

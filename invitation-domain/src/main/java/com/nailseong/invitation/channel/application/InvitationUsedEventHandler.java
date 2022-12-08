@@ -3,6 +3,7 @@ package com.nailseong.invitation.channel.application;
 import com.nailseong.invitation.channel.domain.ChannelMember;
 import com.nailseong.invitation.channel.domain.ChannelMemberRepository;
 import com.nailseong.invitation.channel.exception.AlreadyJoinException;
+import com.nailseong.invitation.channel.exception.DuplicateNicknameException;
 import com.nailseong.invitation.invitation.domain.InvitationUsedEvent;
 import java.util.List;
 import org.springframework.context.event.EventListener;
@@ -19,12 +20,15 @@ public class InvitationUsedEventHandler {
 
     @EventListener(InvitationUsedEvent.class)
     public void handle(final InvitationUsedEvent event) {
+        // TODO: 2022/12/09 if not enough left people in channel throw exception 
         final List<ChannelMember> channelMembers = channelMemberRepo.findAllByChannelId(event.getChannelId());
         if (isJoinedGuest(channelMembers, event.getGuestId())) {
             throw new AlreadyJoinException();
         }
 
-        // TODO: 2022/12/09 닉네임 중복 검사
+        if (isDuplicatedNickname(channelMembers, event.getNickname())) {
+            throw new DuplicateNicknameException();
+        }
 
         final ChannelMember guest = ChannelMember.ofGuest(
                 event.getChannelId(),
@@ -38,5 +42,11 @@ public class InvitationUsedEventHandler {
         return channelMembers
                 .stream()
                 .anyMatch(it -> it.isSameMember(guestId));
+    }
+
+    private boolean isDuplicatedNickname(final List<ChannelMember> channelMembers, final String nickname) {
+        return channelMembers
+                .stream()
+                .anyMatch(it -> it.isSameNickname(nickname));
     }
 }
