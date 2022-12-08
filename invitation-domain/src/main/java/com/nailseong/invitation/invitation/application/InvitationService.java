@@ -43,6 +43,6 @@ public class InvitationService {
                 .orElseThrow(InvalidCodeException::new);
         // TODO: 2022/12/09 이미 채널에 참여한 경우 예외
         // TODO: 2022/12/09 닉네임 중복 검사
-        invitation.use(info.now());
+        invitation.use(info.now(), info.memberId(), info.nickname());
     }
 }

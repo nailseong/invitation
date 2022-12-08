@@ -1,6 +1,7 @@
 package com.nailseong.invitation.invitation.domain;
 
 import com.nailseong.invitation.config.BaseEntity;
+import com.nailseong.invitation.event.Events;
 import com.nailseong.invitation.invitation.exception.InvalidCodeException;
 import com.nailseong.invitation.invitation.exception.InvalidExpireAfterException;
 import com.nailseong.invitation.invitation.exception.InvalidMaxUsesException;
@@ -43,7 +44,7 @@ public class Invitation extends BaseEntity {
         setCode(code);
     }
 
-    public void use(final LocalDateTime joinTime) {
+    public void use(final LocalDateTime joinTime, final Long guestId, final String nickname) {
         if (expireAfter.isBefore(joinTime)) {
             throw new InvitationExpireException();
         }
@@ -51,6 +52,7 @@ public class Invitation extends BaseEntity {
             throw new NoLeftUsesException();
         }
         numberOfUses++;
+        Events.raise(new InvitationUsedEvent(channelId, guestId, nickname));
     }
 
     private boolean hasLeftUses() {
