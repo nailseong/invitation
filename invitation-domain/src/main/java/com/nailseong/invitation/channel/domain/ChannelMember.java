@@ -25,6 +25,10 @@ public class ChannelMember extends BaseEntity {
     protected ChannelMember() {
     }
 
+    private ChannelMember(final Long memberId, final MemberRole role, final String nickname) {
+        this(null, memberId, role, nickname);
+    }
+
     private ChannelMember(final Long channelId, final Long memberId, final MemberRole role, final String nickname) {
         this.channelId = channelId;
         this.memberId = memberId;
@@ -34,7 +38,6 @@ public class ChannelMember extends BaseEntity {
 
     public static ChannelMember ofHost(final Long hostId, final String nickname) {
         return new ChannelMember(
-                null,
                 hostId,
                 MemberRole.HOST,
                 nickname
