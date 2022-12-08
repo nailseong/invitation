@@ -21,12 +21,7 @@ public class InvitationUsedEventHandler {
     @EventListener(InvitationUsedEvent.class)
     public void handle(final InvitationUsedEvent event) {
         final Channel channel = channelRepo.getById(event.getChannelId());
-        channel.join(event.getGuestId(), event.getNickname());
-
-        channelRepo.saveMember(ChannelMember.ofGuest(
-                event.getChannelId(),
-                event.getGuestId(),
-                event.getNickname()
-        ));
+        final ChannelMember joinedGuest = channel.join(event.getGuestId(), event.getNickname());
+        channelRepo.saveMember(joinedGuest);
     }
 }

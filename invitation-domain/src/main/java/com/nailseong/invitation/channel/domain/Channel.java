@@ -50,7 +50,7 @@ public class Channel extends BaseEntity {
         );
     }
 
-    public void join(final Long guestId, final String nickname) {
+    public ChannelMember join(final Long guestId, final String nickname) {
         if (!hasLeftPeople()) {
             throw new NoLeftPeopleException();
         }
@@ -61,6 +61,7 @@ public class Channel extends BaseEntity {
             throw new DuplicateNicknameException();
         }
         numberOfPeople++;
+        return ChannelMember.ofGuest(getId(), guestId, nickname);
     }
 
     private boolean hasLeftPeople() {
