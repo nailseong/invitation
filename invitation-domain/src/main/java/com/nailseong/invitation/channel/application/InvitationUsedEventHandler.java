@@ -6,8 +6,10 @@ import com.nailseong.invitation.channel.domain.ChannelRepository;
 import com.nailseong.invitation.invitation.domain.InvitationUsedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional
 public class InvitationUsedEventHandler {
 
     private final ChannelRepository channelRepo;
