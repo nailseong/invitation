@@ -5,10 +5,10 @@ import com.nailseong.invitation.authentication.support.Verified;
 import com.nailseong.invitation.channel.support.ChannelAndMember;
 import com.nailseong.invitation.invitation.application.InvitationService;
 import com.nailseong.invitation.invitation.application.dto.InvitationInfo;
-import com.nailseong.invitation.invitation.application.dto.JoinByInvitationInfo;
+import com.nailseong.invitation.invitation.application.dto.UseInvitationInfo;
 import com.nailseong.invitation.invitation.dto.CreateInvitationRequest;
 import com.nailseong.invitation.invitation.dto.CreateInvitationResponse;
-import com.nailseong.invitation.invitation.dto.JoinByInvitationRequest;
+import com.nailseong.invitation.invitation.dto.UseInvitationRequest;
 import jakarta.validation.Valid;
 import java.time.LocalDateTime;
 import org.springframework.http.HttpStatus;
@@ -46,15 +46,15 @@ public class InvitationController {
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PostMapping("/{invitationCode}")
-    public void joinByInvitation(@RequestBody @Valid final JoinByInvitationRequest request,
-                                 @PathVariable final String invitationCode,
-                                 @Verified final LoginSession loginSession) {
-        final JoinByInvitationInfo joinByInvitationInfo = new JoinByInvitationInfo(
+    public void useInvitation(@RequestBody @Valid final UseInvitationRequest request,
+                              @PathVariable final String invitationCode,
+                              @Verified final LoginSession loginSession) {
+        final UseInvitationInfo useInvitationInfo = new UseInvitationInfo(
                 invitationCode,
                 request.nickname(),
                 loginSession.memberId(),
                 LocalDateTime.now()
         );
-        invitationService.joinByInvitation(joinByInvitationInfo);
+        invitationService.useInvitation(useInvitationInfo);
     }
 }

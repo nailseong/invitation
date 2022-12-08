@@ -8,7 +8,7 @@ import static org.springframework.http.HttpStatus.NO_CONTENT;
 import static org.springframework.http.HttpStatus.OK;
 
 import com.nailseong.invitation.invitation.dto.CreateInvitationRequest;
-import com.nailseong.invitation.invitation.dto.JoinByInvitationRequest;
+import com.nailseong.invitation.invitation.dto.UseInvitationRequest;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -115,8 +115,8 @@ class InvitationAcceptanceTest extends AcceptanceTest {
     }
 
     @Nested
-    @DisplayName("초대장을 통한 채널 참가 기능이")
-    class Join {
+    @DisplayName("초대장 사용하기 기능이")
+    class Use {
 
         private static final String URL_PREFIX = "/api/invitations/";
 
@@ -133,7 +133,7 @@ class InvitationAcceptanceTest extends AcceptanceTest {
         void success() {
             // given
             final String invitationCode = createInvitation(sessionId, channelId, LocalDateTime.now().plusDays(1));
-            final var request = new JoinByInvitationRequest("nailseong");
+            final var request = new UseInvitationRequest("nailseong");
 
             // when
             final var response = url(URL_PREFIX + invitationCode)
@@ -153,7 +153,7 @@ class InvitationAcceptanceTest extends AcceptanceTest {
             @DisplayName("초대장에 해당하는 채널이 존재하지 않는 경우이다.")
             void notExistChannel() {
                 // given
-                final var request = new JoinByInvitationRequest("nailseong");
+                final var request = new UseInvitationRequest("nailseong");
 
                 // when
                 final var response = url(URL_PREFIX + "x0x0X0")
@@ -171,7 +171,7 @@ class InvitationAcceptanceTest extends AcceptanceTest {
                 // given
                 final LocalDateTime expireAfter = LocalDateTime.now().plusSeconds(1L);
                 final String invitationCode = createInvitation(sessionId, channelId, expireAfter);
-                final var request = new JoinByInvitationRequest("nailseong");
+                final var request = new UseInvitationRequest("nailseong");
 
                 Thread.sleep(1100);
 
@@ -191,9 +191,9 @@ class InvitationAcceptanceTest extends AcceptanceTest {
                 // given
                 final LocalDateTime expireAfter = LocalDateTime.now().plusDays(1L);
                 final String invitationCode = createInvitation(sessionId, channelId, expireAfter);
-                final var request = new JoinByInvitationRequest("nailseong");
+                final var request = new UseInvitationRequest("nailseong");
 
-                joinByInvitation(guestSessionId, invitationCode);
+                useInvitation(guestSessionId, invitationCode);
 
                 // when
                 final var response = url(URL_PREFIX + invitationCode)

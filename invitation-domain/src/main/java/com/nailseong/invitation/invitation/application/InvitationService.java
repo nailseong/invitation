@@ -3,7 +3,7 @@ package com.nailseong.invitation.invitation.application;
 import com.nailseong.invitation.channel.support.ChannelAndMember;
 import com.nailseong.invitation.channel.support.HostOnly;
 import com.nailseong.invitation.invitation.application.dto.InvitationInfo;
-import com.nailseong.invitation.invitation.application.dto.JoinByInvitationInfo;
+import com.nailseong.invitation.invitation.application.dto.UseInvitationInfo;
 import com.nailseong.invitation.invitation.domain.Invitation;
 import com.nailseong.invitation.invitation.domain.InvitationRepository;
 import com.nailseong.invitation.invitation.exception.InvalidCodeException;
@@ -38,7 +38,7 @@ public class InvitationService {
         return invitation.getCode();
     }
 
-    public void joinByInvitation(final JoinByInvitationInfo info) {
+    public void useInvitation(final UseInvitationInfo info) {
         final Invitation invitation = invitationRepo.findByCode(info.invitationCode())
                 .orElseThrow(InvalidCodeException::new);
         // TODO: 2022/12/09 이미 채널에 참여한 경우 예외

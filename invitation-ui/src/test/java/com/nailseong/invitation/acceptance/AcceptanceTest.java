@@ -6,7 +6,7 @@ import static org.springframework.http.HttpHeaders.LOCATION;
 import com.nailseong.invitation.authentication.presentation.dto.LoginRequest;
 import com.nailseong.invitation.channel.dto.CreateChannelRequest;
 import com.nailseong.invitation.invitation.dto.CreateInvitationRequest;
-import com.nailseong.invitation.invitation.dto.JoinByInvitationRequest;
+import com.nailseong.invitation.invitation.dto.UseInvitationRequest;
 import com.nailseong.invitation.member.dto.SignupRequest;
 import com.nailseong.invitation.util.DatabaseCleaner;
 import io.restassured.RestAssured;
@@ -74,8 +74,8 @@ abstract class AcceptanceTest {
                 .split("https://invitation.nailseong.com/")[1];
     }
 
-    protected void joinByInvitation(final String sessionId, final String invitationCode) {
-        final var request = new JoinByInvitationRequest("nailseong");
+    protected void useInvitation(final String sessionId, final String invitationCode) {
+        final var request = new UseInvitationRequest("nailseong");
         url("/api/invitations/" + invitationCode)
                 .body(request)
                 .method(POST)

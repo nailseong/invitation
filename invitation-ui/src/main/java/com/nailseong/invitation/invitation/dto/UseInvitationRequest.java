@@ -2,7 +2,7 @@ package com.nailseong.invitation.invitation.dto;
 
 import jakarta.validation.constraints.NotEmpty;
 
-public record JoinByInvitationRequest(
+public record UseInvitationRequest(
         @NotEmpty
         String nickname
 ) {
