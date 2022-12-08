@@ -64,7 +64,12 @@ abstract class AcceptanceTest {
     }
 
     protected String createInvitation(final String sessionId, final Long channelId, final LocalDateTime expireAfter) {
-        final var request = new CreateInvitationRequest(channelId, expireAfter, 1);
+        return createInvitation(sessionId, channelId, expireAfter, 1);
+    }
+
+    protected String createInvitation(final String sessionId, final Long channelId, final LocalDateTime expireAfter,
+                                      final int maxUses) {
+        final var request = new CreateInvitationRequest(channelId, expireAfter, maxUses);
         return url("/api/invitations")
                 .body(request)
                 .method(POST)

@@ -41,6 +41,19 @@ public class ChannelMember extends BaseEntity {
         );
     }
 
+    public static ChannelMember ofGuest(final Long channelId, final Long guestId, final String nickname) {
+        return new ChannelMember(
+                channelId,
+                guestId,
+                MemberRole.GUEST,
+                nickname
+        );
+    }
+
+    public boolean isSameMember(final Long memberId) {
+        return this.memberId.equals(memberId);
+    }
+
     public Long getChannelId() {
         return channelId;
     }

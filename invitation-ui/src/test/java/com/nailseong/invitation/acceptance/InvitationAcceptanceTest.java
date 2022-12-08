@@ -204,6 +204,26 @@ class InvitationAcceptanceTest extends AcceptanceTest {
                 // then
                 response.statusCode(BAD_REQUEST.value());
             }
+
+            @Test
+            @DisplayName("이미 가입한 채널인 경우이다.")
+            void alreadyJoin() {
+                // given
+                final LocalDateTime expireAfter = LocalDateTime.now().plusDays(1L);
+                final String invitationCode = createInvitation(sessionId, channelId, expireAfter, 2);
+                final var request = new UseInvitationRequest("nailseong");
+
+                useInvitation(guestSessionId, invitationCode);
+
+                // when
+                final var response = url(URL_PREFIX + invitationCode)
+                        .body(request)
+                        .method(POST)
+                        .send(guestSessionId);
+
+                // then
+                response.statusCode(BAD_REQUEST.value());
+            }
         }
     }
 }
