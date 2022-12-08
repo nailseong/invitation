@@ -2,7 +2,6 @@ package com.nailseong.invitation.channel.support;
 
 import com.nailseong.invitation.channel.domain.Channel;
 import com.nailseong.invitation.channel.domain.ChannelRepository;
-import com.nailseong.invitation.channel.exception.ChannelNotFoundException;
 import com.nailseong.invitation.channel.exception.NotHostException;
 import java.util.Arrays;
 import org.aspectj.lang.JoinPoint;
@@ -23,8 +22,7 @@ public class ChannelAndMemberValidator {
     @Before("@annotation(com.nailseong.invitation.channel.support.HostOnly)")
     public void validate(final JoinPoint joinPoint) {
         final ChannelAndMember channelAndMember = getChannelAndMember(joinPoint);
-        final Channel channel = channelRepo.findById(channelAndMember.channelId())
-                .orElseThrow(ChannelNotFoundException::new);
+        final Channel channel = channelRepo.getById(channelAndMember.channelId());
         if (!channel.isHost(channelAndMember.memberId())) {
             throw new NotHostException();
         }

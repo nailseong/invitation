@@ -1,5 +1,6 @@
-package com.nailseong.invitation.channel.domain;
+package com.nailseong.invitation.channel.infrastructure;
 
+import com.nailseong.invitation.channel.domain.ChannelMember;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 

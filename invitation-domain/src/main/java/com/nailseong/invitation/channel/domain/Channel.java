@@ -30,20 +30,23 @@ public class Channel extends BaseEntity {
     protected Channel() {
     }
 
-    private Channel(final Long hostId, final int maxPeople, final int numberOfPeople) {
+    public Channel(final Long hostId, final int maxPeople, final int numberOfPeople,
+                   final List<ChannelMember> channelMembers) {
         this.hostId = hostId;
         this.maxPeople = maxPeople;
         this.numberOfPeople = numberOfPeople;
+        this.channelMembers = channelMembers;
     }
 
-    public static Channel ofNew(final Long hostId, final int maxPeople) {
+    public static Channel ofNew(final Long hostId, final int maxPeople, final ChannelMember host) {
         if (maxPeople < 2) {
             throw new InvalidMaxPeopleException();
         }
         return new Channel(
                 hostId,
                 maxPeople,
-                INITIAL_NUMBER_OF_PEOPLE
+                INITIAL_NUMBER_OF_PEOPLE,
+                List.of(host)
         );
     }
 
@@ -90,7 +93,11 @@ public class Channel extends BaseEntity {
         return numberOfPeople;
     }
 
-    public void setChannelMembers(final List<ChannelMember> channelMembers) {
+    public List<ChannelMember> getChannelMembers() {
+        return channelMembers;
+    }
+
+    void setChannelMembers(final List<ChannelMember> channelMembers) {
         this.channelMembers = channelMembers;
     }
 }
