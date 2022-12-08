@@ -1,9 +1,11 @@
 package com.nailseong.invitation.acceptance;
 
 import static io.restassured.http.Method.POST;
+import static org.hamcrest.Matchers.is;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
 import com.nailseong.invitation.channel.dto.CreateChannelRequest;
+import com.nailseong.invitation.channel.exception.InvalidMaxPeopleException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -57,7 +59,8 @@ class ChannelAcceptanceTest extends AcceptanceTest {
                         .send(sessionId);
 
                 // then
-                response.statusCode(BAD_REQUEST.value());
+                response.statusCode(BAD_REQUEST.value())
+                        .body("message", is(InvalidMaxPeopleException.MESSAGE));
             }
         }
     }

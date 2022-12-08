@@ -8,9 +8,16 @@ import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.NO_CONTENT;
 import static org.springframework.http.HttpStatus.OK;
 
+import com.nailseong.invitation.channel.exception.AlreadyJoinException;
 import com.nailseong.invitation.channel.exception.DuplicateNicknameException;
+import com.nailseong.invitation.channel.exception.NotHostException;
 import com.nailseong.invitation.invitation.dto.CreateInvitationRequest;
 import com.nailseong.invitation.invitation.dto.UseInvitationRequest;
+import com.nailseong.invitation.invitation.exception.InvalidCodeException;
+import com.nailseong.invitation.invitation.exception.InvalidExpireAfterException;
+import com.nailseong.invitation.invitation.exception.InvalidMaxUsesException;
+import com.nailseong.invitation.invitation.exception.InvitationExpireException;
+import com.nailseong.invitation.invitation.exception.NoLeftUsesException;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -76,7 +83,8 @@ class InvitationAcceptanceTest extends AcceptanceTest {
                         .send(sessionId);
 
                 // then
-                response.statusCode(BAD_REQUEST.value());
+                response.statusCode(BAD_REQUEST.value())
+                        .body("message", is(InvalidMaxUsesException.MESSAGE));
             }
 
             @Test
@@ -92,7 +100,8 @@ class InvitationAcceptanceTest extends AcceptanceTest {
                         .send(sessionId);
 
                 // then
-                response.statusCode(BAD_REQUEST.value());
+                response.statusCode(BAD_REQUEST.value())
+                        .body("message", is(InvalidExpireAfterException.MESSAGE));
             }
 
             @Test
@@ -111,7 +120,8 @@ class InvitationAcceptanceTest extends AcceptanceTest {
                         .send(guestSessionId);
 
                 // then
-                response.statusCode(BAD_REQUEST.value());
+                response.statusCode(BAD_REQUEST.value())
+                        .body("message", is(NotHostException.MESSAGE));
             }
         }
     }
@@ -164,7 +174,8 @@ class InvitationAcceptanceTest extends AcceptanceTest {
                         .send(guestSessionId);
 
                 // then
-                response.statusCode(BAD_REQUEST.value());
+                response.statusCode(BAD_REQUEST.value())
+                        .body("message", is(InvalidCodeException.MESSAGE));
             }
 
             @Test
@@ -184,7 +195,8 @@ class InvitationAcceptanceTest extends AcceptanceTest {
                         .send(guestSessionId);
 
                 // then
-                response.statusCode(BAD_REQUEST.value());
+                response.statusCode(BAD_REQUEST.value())
+                        .body("message", is(InvitationExpireException.MESSAGE));
             }
 
             @Test
@@ -204,7 +216,8 @@ class InvitationAcceptanceTest extends AcceptanceTest {
                         .send(guestSessionId);
 
                 // then
-                response.statusCode(BAD_REQUEST.value());
+                response.statusCode(BAD_REQUEST.value())
+                        .body("message", is(NoLeftUsesException.MESSAGE));
             }
 
             @Test
@@ -224,7 +237,8 @@ class InvitationAcceptanceTest extends AcceptanceTest {
                         .send(guestSessionId);
 
                 // then
-                response.statusCode(BAD_REQUEST.value());
+                response.statusCode(BAD_REQUEST.value())
+                        .body("message", is(AlreadyJoinException.MESSAGE));
             }
 
             @Test
