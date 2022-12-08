@@ -1,8 +1,12 @@
 # invitation
 
-## 요구사항
+초대장을 통해 채널을 관리한다.
 
-![discord-invitation](https://support.discord.com/hc/article_attachments/360005822512/inv-bx1.jpg)
+<p align="center">
+    <img width="400" alt="discord-invitation" src="https://support.discord.com/hc/article_attachments/360005822512/inv-bx1.jpg">
+</p>
+
+## 요구사항
 
 - 회원가입을 할 수 있다.
     - 회원가입 시 사용자 이름이 필요하다.
