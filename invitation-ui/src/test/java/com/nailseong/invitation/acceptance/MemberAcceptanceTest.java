@@ -1,10 +1,12 @@
 package com.nailseong.invitation.acceptance;
 
 import static io.restassured.http.Method.POST;
+import static org.hamcrest.Matchers.is;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.CREATED;
 
 import com.nailseong.invitation.member.dto.SignupRequest;
+import com.nailseong.invitation.member.exception.DuplicateUsernameException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -68,7 +70,8 @@ class MemberAcceptanceTest extends AcceptanceTest {
                         .send();
 
                 // then
-                response.statusCode(BAD_REQUEST.value());
+                response.statusCode(BAD_REQUEST.value())
+                        .body("message", is(DuplicateUsernameException.MESSAGE));
             }
         }
     }

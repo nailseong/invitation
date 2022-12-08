@@ -3,8 +3,10 @@ package com.nailseong.invitation.invitation.application;
 import com.nailseong.invitation.channel.support.ChannelAndMember;
 import com.nailseong.invitation.channel.support.HostOnly;
 import com.nailseong.invitation.invitation.application.dto.InvitationInfo;
+import com.nailseong.invitation.invitation.application.dto.UseInvitationInfo;
 import com.nailseong.invitation.invitation.domain.Invitation;
 import com.nailseong.invitation.invitation.domain.InvitationRepository;
+import com.nailseong.invitation.invitation.exception.InvalidCodeException;
 import com.nailseong.invitation.util.RandomStringGenerator;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,5 +36,11 @@ public class InvitationService {
                 code
         ));
         return invitation.getCode();
+    }
+
+    public void useInvitation(final UseInvitationInfo info) {
+        final Invitation invitation = invitationRepo.findByCode(info.invitationCode())
+                .orElseThrow(InvalidCodeException::new);
+        invitation.use(info.now(), info.memberId(), info.nickname());
     }
 }

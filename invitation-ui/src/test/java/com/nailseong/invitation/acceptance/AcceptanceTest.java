@@ -5,11 +5,14 @@ import static org.springframework.http.HttpHeaders.LOCATION;
 
 import com.nailseong.invitation.authentication.presentation.dto.LoginRequest;
 import com.nailseong.invitation.channel.dto.CreateChannelRequest;
+import com.nailseong.invitation.invitation.dto.CreateInvitationRequest;
+import com.nailseong.invitation.invitation.dto.UseInvitationRequest;
 import com.nailseong.invitation.member.dto.SignupRequest;
 import com.nailseong.invitation.util.DatabaseCleaner;
 import io.restassured.RestAssured;
 import io.restassured.http.Method;
 import io.restassured.response.ValidatableResponse;
+import java.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -50,7 +53,11 @@ abstract class AcceptanceTest {
     }
 
     protected Long createChannel(final String sessionId) {
-        final var request = new CreateChannelRequest("rick", 2);
+        return createChannel(sessionId, 2);
+    }
+
+    protected Long createChannel(final String sessionId, final int maxPeople) {
+        final var request = new CreateChannelRequest("rick", maxPeople);
         return Long.valueOf(url("/api/channels")
                 .body(request)
                 .method(POST)
@@ -58,6 +65,31 @@ abstract class AcceptanceTest {
                 .extract()
                 .header(LOCATION)
                 .split("/")[3]);
+    }
+
+    protected String createInvitation(final String sessionId, final Long channelId, final LocalDateTime expireAfter) {
+        return createInvitation(sessionId, channelId, expireAfter, 1);
+    }
+
+    protected String createInvitation(final String sessionId, final Long channelId, final LocalDateTime expireAfter,
+                                      final int maxUses) {
+        final var request = new CreateInvitationRequest(channelId, expireAfter, maxUses);
+        return url("/api/invitations")
+                .body(request)
+                .method(POST)
+                .sendWithoutLog(sessionId)
+                .extract()
+                .<String>path("invitationUrl")
+                .split("https://invitation.nailseong.com/")[1];
+    }
+
+    protected void useInvitation(final String sessionId, final String invitationCode, final String nickname) {
+        final var request = new UseInvitationRequest(nickname);
+        url("/api/invitations/" + invitationCode)
+                .body(request)
+                .method(POST)
+                .sendWithoutLog(sessionId);
+
     }
 
     protected UrlBuilder url(final String url) {

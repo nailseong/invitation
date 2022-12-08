@@ -5,13 +5,18 @@ import com.nailseong.invitation.authentication.support.Verified;
 import com.nailseong.invitation.channel.support.ChannelAndMember;
 import com.nailseong.invitation.invitation.application.InvitationService;
 import com.nailseong.invitation.invitation.application.dto.InvitationInfo;
+import com.nailseong.invitation.invitation.application.dto.UseInvitationInfo;
 import com.nailseong.invitation.invitation.dto.CreateInvitationRequest;
 import com.nailseong.invitation.invitation.dto.CreateInvitationResponse;
+import com.nailseong.invitation.invitation.dto.UseInvitationRequest;
 import jakarta.validation.Valid;
 import java.time.LocalDateTime;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -37,5 +42,19 @@ public class InvitationController {
         final ChannelAndMember channelAndMember = new ChannelAndMember(request.channelId(), loginSession.memberId());
         final String invitationCode = invitationService.createInvitation(invitationInfo, channelAndMember);
         return new CreateInvitationResponse(HOST + invitationCode);
+    }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PostMapping("/{invitationCode}")
+    public void useInvitation(@RequestBody @Valid final UseInvitationRequest request,
+                              @PathVariable final String invitationCode,
+                              @Verified final LoginSession loginSession) {
+        final UseInvitationInfo useInvitationInfo = new UseInvitationInfo(
+                invitationCode,
+                request.nickname(),
+                loginSession.memberId(),
+                LocalDateTime.now()
+        );
+        invitationService.useInvitation(useInvitationInfo);
     }
 }

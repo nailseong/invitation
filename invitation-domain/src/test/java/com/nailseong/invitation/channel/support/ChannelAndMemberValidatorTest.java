@@ -6,10 +6,10 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 
 import com.nailseong.invitation.channel.domain.Channel;
+import com.nailseong.invitation.channel.domain.ChannelMember;
 import com.nailseong.invitation.channel.domain.ChannelRepository;
 import com.nailseong.invitation.channel.exception.ChannelNotFoundException;
 import com.nailseong.invitation.channel.exception.NotHostException;
-import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -59,9 +59,10 @@ class ChannelAndMemberValidatorTest {
         @DisplayName("성공한다.")
         void success() {
             // given
-            final Channel channel = Channel.ofNew(hostId, 2);
-            given(channelRepo.findById(anyLong()))
-                    .willReturn(Optional.of(channel));
+            final ChannelMember host = ChannelMember.ofHost(hostId, "rick");
+            final Channel channel = Channel.ofNew(hostId, 2, host);
+            given(channelRepo.getById(anyLong()))
+                    .willReturn(channel);
 
             final ChannelAndMember channelAndMember = new ChannelAndMember(7L, hostId);
 
@@ -78,8 +79,8 @@ class ChannelAndMemberValidatorTest {
             @DisplayName("채널이 존재하지 않는 경우이다.")
             void notExistChannel() {
                 // given
-                given(channelRepo.findById(anyLong()))
-                        .willReturn(Optional.empty());
+                given(channelRepo.getById(anyLong()))
+                        .willThrow(new ChannelNotFoundException());
 
                 final ChannelAndMember channelAndMember = new ChannelAndMember(7L, hostId);
 
@@ -92,9 +93,10 @@ class ChannelAndMemberValidatorTest {
             @DisplayName("호스트가 아닌 경우이다.")
             void notHost() {
                 // given
-                final Channel channel = Channel.ofNew(hostId, 2);
-                given(channelRepo.findById(anyLong()))
-                        .willReturn(Optional.of(channel));
+                final ChannelMember host = ChannelMember.ofHost(hostId, "rick");
+                final Channel channel = Channel.ofNew(hostId, 2, host);
+                given(channelRepo.getById(anyLong()))
+                        .willReturn(channel);
 
                 final ChannelAndMember channelAndMember = new ChannelAndMember(7L, hostId + 1);
 

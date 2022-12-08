@@ -25,6 +25,10 @@ public class ChannelMember extends BaseEntity {
     protected ChannelMember() {
     }
 
+    private ChannelMember(final Long memberId, final MemberRole role, final String nickname) {
+        this(null, memberId, role, nickname);
+    }
+
     private ChannelMember(final Long channelId, final Long memberId, final MemberRole role, final String nickname) {
         this.channelId = channelId;
         this.memberId = memberId;
@@ -32,17 +36,37 @@ public class ChannelMember extends BaseEntity {
         this.nickname = nickname;
     }
 
-    public static ChannelMember ofHost(final Long channelId, final Long hostId, final String nickname) {
+    public static ChannelMember ofHost(final Long hostId, final String nickname) {
         return new ChannelMember(
-                channelId,
                 hostId,
                 MemberRole.HOST,
                 nickname
         );
     }
 
+    public static ChannelMember ofGuest(final Long channelId, final Long guestId, final String nickname) {
+        return new ChannelMember(
+                channelId,
+                guestId,
+                MemberRole.GUEST,
+                nickname
+        );
+    }
+
+    public boolean isSameMember(final Long memberId) {
+        return this.memberId.equals(memberId);
+    }
+
+    public boolean isSameNickname(final String nickname) {
+        return this.nickname.equals(nickname);
+    }
+
     public Long getChannelId() {
         return channelId;
+    }
+
+    void setChannelId(final Long channelId) {
+        this.channelId = channelId;
     }
 
     public Long getMemberId() {
