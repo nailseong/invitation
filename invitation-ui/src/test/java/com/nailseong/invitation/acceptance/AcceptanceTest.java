@@ -5,11 +5,14 @@ import static org.springframework.http.HttpHeaders.LOCATION;
 
 import com.nailseong.invitation.authentication.presentation.dto.LoginRequest;
 import com.nailseong.invitation.channel.dto.CreateChannelRequest;
+import com.nailseong.invitation.invitation.dto.CreateInvitationRequest;
+import com.nailseong.invitation.invitation.dto.JoinByInvitationRequest;
 import com.nailseong.invitation.member.dto.SignupRequest;
 import com.nailseong.invitation.util.DatabaseCleaner;
 import io.restassured.RestAssured;
 import io.restassured.http.Method;
 import io.restassured.response.ValidatableResponse;
+import java.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -58,6 +61,26 @@ abstract class AcceptanceTest {
                 .extract()
                 .header(LOCATION)
                 .split("/")[3]);
+    }
+
+    protected String createInvitation(final String sessionId, final Long channelId, final LocalDateTime expireAfter) {
+        final var request = new CreateInvitationRequest(channelId, expireAfter, 1);
+        return url("/api/invitations")
+                .body(request)
+                .method(POST)
+                .sendWithoutLog(sessionId)
+                .extract()
+                .<String>path("invitationUrl")
+                .split("https://invitation.nailseong.com/")[1];
+    }
+
+    protected void joinByInvitation(final String sessionId, final String invitationCode) {
+        final var request = new JoinByInvitationRequest("nailseong");
+        url("/api/invitations/" + invitationCode)
+                .body(request)
+                .method(POST)
+                .sendWithoutLog(sessionId);
+
     }
 
     protected UrlBuilder url(final String url) {
