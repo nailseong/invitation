@@ -8,6 +8,11 @@
 <h1>
     Quickstart your channel invitation management system
 </h1>
+<form th:action="@{/login}" th:object="${request}" method="post">
+    <span>Username</span>
+    <input type="text" th:field="*{username}"/> <br/>
+    <button type="submit">Login</button>
+</form>
 <a th:href="@{/signup}">
     Sign up
 </a>
