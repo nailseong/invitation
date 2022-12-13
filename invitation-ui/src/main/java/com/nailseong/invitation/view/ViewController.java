@@ -2,6 +2,8 @@ package com.nailseong.invitation.view;
 
 import com.nailseong.invitation.authentication.presentation.AuthController;
 import com.nailseong.invitation.authentication.presentation.dto.LoginRequest;
+import com.nailseong.invitation.authentication.support.LoginSession;
+import com.nailseong.invitation.authentication.support.LoginView;
 import com.nailseong.invitation.member.MemberController;
 import com.nailseong.invitation.member.dto.SignupRequest;
 import org.springframework.stereotype.Controller;
@@ -23,9 +25,13 @@ public class ViewController {
     }
 
     @GetMapping("/")
-    public ModelAndView getHome(final LoginRequest request) {
+    public ModelAndView getHome(final LoginRequest request, @LoginView final LoginSession session) {
         final ModelAndView view = new ModelAndView("index");
         view.addObject("request", request);
+        view.addObject("isLogin", session != null);
+        if (session != null) {
+            view.addObject("username", session.username());
+        }
         return view;
     }
 
