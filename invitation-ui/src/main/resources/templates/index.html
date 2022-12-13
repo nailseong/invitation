@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Invitation</title>
+</head>
+<body>
+
+<h1>
+    Quickstart your channel invitation management system
+</h1>
+
+<div th:if="${isLogin}">
+    <h2 th:text="'Hello ' + ${username}"></h2>
+<!--    TODO: Display list of channels user joined-->
+</div>
+
+<div th:if="!${isLogin}">
+    <form th:action="@{/login}" th:object="${request}" method="post">
+        <span>Username</span>
+        <input type="text" th:field="*{username}"/> <br/>
+        <button type="submit">Login</button>
+    </form>
+    <a th:href="@{/signup}">
+        Sign up
+    </a>
+</div>
+
+</body>
+</html>
