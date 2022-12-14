@@ -6,6 +6,7 @@ import com.nailseong.invitation.authentication.support.LoginSession;
 import com.nailseong.invitation.authentication.support.LoginView;
 import com.nailseong.invitation.authentication.support.Verified;
 import com.nailseong.invitation.channel.ChannelController;
+import com.nailseong.invitation.channel.application.dto.ChannelDetailResponse;
 import com.nailseong.invitation.channel.application.dto.ChannelListResponse;
 import com.nailseong.invitation.channel.dto.CreateChannelRequest;
 import com.nailseong.invitation.member.MemberController;
@@ -15,6 +16,7 @@ import java.util.List;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -78,5 +80,14 @@ public class ViewController {
         final CreateChannelRequest request = new CreateChannelRequest(form.nickname(), form.maxPeople());
         channelController.createChannel(request, loginSession);
         return "redirect:/";
+    }
+
+    @GetMapping("/channels/{channelId}")
+    public ModelAndView getChannelDetail(@PathVariable final Long channelId,
+                                         @Verified final LoginSession loginSession) {
+        final ChannelDetailResponse channel = channelController.getDetail(channelId, loginSession);
+        final ModelAndView view = new ModelAndView("channel");
+        view.addObject("channel", channel);
+        return view;
     }
 }

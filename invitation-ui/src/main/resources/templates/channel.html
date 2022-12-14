@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Invitation</title>
+</head>
+<body>
+<h1>Channel</h1>
+<span th:text="'MaxPeople : ' + ${channel.maxPeople}"></span> <br/>
+<span th:text="'NumberOfPeople : ' + ${channel.numberOfPeople}"></span> <br/><br/>
+<span>ChannelMembers</span>
+<table class="tb_col">
+    <tr>
+        <th>Role</th>
+        <th>Nickname</th>
+    </tr>
+    <tr th:each="member : ${channel.channelMembers}">
+        <td th:text="${member.role}"></td>
+        <td th:text="${member.nickname}"></td>
+    </tr>
+</table>
+</body>
+</html>
