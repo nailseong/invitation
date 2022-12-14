@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Invitation</title>
+</head>
+<body>
+<h1>Create channel</h1>
+<form th:action="@{/channels}" th:object="${request}" method="post">
+    <span>Nickname</span>
+    <input type="text" th:field="*{nickname}"/> <br/>
+    <span>MaxPeople</span>
+    <input type="number" th:field="*{maxPeople}"/> <br/>
+    <button type="submit">Create</button>
+</form>
+</body>
+</html>

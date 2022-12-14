@@ -8,6 +8,7 @@ import com.nailseong.invitation.channel.ChannelController;
 import com.nailseong.invitation.channel.application.dto.ChannelListResponse;
 import com.nailseong.invitation.member.MemberController;
 import com.nailseong.invitation.member.dto.SignupRequest;
+import com.nailseong.invitation.view.dto.CreateChannelForm;
 import java.util.List;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -60,5 +61,12 @@ public class ViewController {
     public String postSignup(@ModelAttribute("request") final SignupRequest request) {
         memberController.signup(request);
         return "redirect:/";
+    }
+
+    @GetMapping("/channels")
+    public ModelAndView getCreateChannel(final CreateChannelForm request) {
+        final ModelAndView view = new ModelAndView("create-channel");
+        view.addObject("request", request);
+        return view;
     }
 }
