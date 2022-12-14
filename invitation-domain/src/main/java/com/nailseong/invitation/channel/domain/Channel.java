@@ -103,7 +103,7 @@ public class Channel extends BaseEntity {
         return channelMembers;
     }
 
-    void setChannelMembers(final List<ChannelMember> channelMembers) {
+    public void setChannelMembers(final List<ChannelMember> channelMembers) {
         this.channelMembers = channelMembers;
     }
 }
