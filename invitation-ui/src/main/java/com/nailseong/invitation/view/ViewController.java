@@ -4,10 +4,13 @@ import com.nailseong.invitation.authentication.presentation.AuthController;
 import com.nailseong.invitation.authentication.presentation.dto.LoginRequest;
 import com.nailseong.invitation.authentication.support.LoginSession;
 import com.nailseong.invitation.authentication.support.LoginView;
+import com.nailseong.invitation.authentication.support.Verified;
 import com.nailseong.invitation.channel.ChannelController;
 import com.nailseong.invitation.channel.application.dto.ChannelListResponse;
+import com.nailseong.invitation.channel.dto.CreateChannelRequest;
 import com.nailseong.invitation.member.MemberController;
 import com.nailseong.invitation.member.dto.SignupRequest;
+import com.nailseong.invitation.view.dto.CreateChannelForm;
 import java.util.List;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -59,6 +62,21 @@ public class ViewController {
     @PostMapping("/signup")
     public String postSignup(@ModelAttribute("request") final SignupRequest request) {
         memberController.signup(request);
+        return "redirect:/";
+    }
+
+    @GetMapping("/channels")
+    public ModelAndView getCreateChannel(final CreateChannelForm request) {
+        final ModelAndView view = new ModelAndView("create-channel");
+        view.addObject("request", request);
+        return view;
+    }
+
+    @PostMapping("/channels")
+    public String postCreateChannel(@ModelAttribute("request") final CreateChannelForm form,
+                                    @Verified final LoginSession loginSession) {
+        final CreateChannelRequest request = new CreateChannelRequest(form.nickname(), form.maxPeople());
+        channelController.createChannel(request, loginSession);
         return "redirect:/";
     }
 }

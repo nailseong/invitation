@@ -13,6 +13,10 @@
 <div th:if="${isLogin}">
     <h2 th:text="'Hello ' + ${username}"></h2>
 
+    <a th:href="@{/channels}">
+        Create channel
+    </a>
+
     <div th:if="${channels.empty}">
         There is no channels.
     </div>
@@ -20,9 +24,9 @@
     <div th:if="${!channels.empty}">
         <table class="tb_col">
             <tr>
-                <th>maxPeople</th>
-                <th>numberOfPeople</th>
-                <th>isHost</th>
+                <th>MaxPeople</th>
+                <th>NumberOfPeople</th>
+                <th>IsHost</th>
             </tr>
             <tr th:each="channel : ${channels}">
                 <td th:text="${channel.maxPeople}"></td>
