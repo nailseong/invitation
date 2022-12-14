@@ -82,6 +82,11 @@ public class Channel extends BaseEntity {
         return hostId.equals(memberId);
     }
 
+    public boolean isChannelMember(final Long memberId) {
+        return channelMembers.stream()
+                .anyMatch(it -> it.isSameMember(memberId));
+    }
+
     public Long getHostId() {
         return hostId;
     }

@@ -1,7 +1,11 @@
 package com.nailseong.invitation.channel.application;
 
+import com.nailseong.invitation.channel.application.dto.ChannelDetailResponse;
 import com.nailseong.invitation.channel.application.dto.ChannelListResponse;
+import com.nailseong.invitation.channel.domain.Channel;
 import com.nailseong.invitation.channel.domain.ChannelRepository;
+import com.nailseong.invitation.channel.support.ChannelAndMember;
+import com.nailseong.invitation.channel.support.ChannelMemberOnly;
 import java.util.List;
 import org.springframework.stereotype.Service;
 
@@ -19,5 +23,11 @@ public class ChannelQueryService {
                 .stream()
                 .map(it -> ChannelListResponse.fromEntity(it, memberId))
                 .toList();
+    }
+
+    @ChannelMemberOnly
+    public ChannelDetailResponse getDetail(final ChannelAndMember channelAndMember) {
+        final Channel channel = channelRepo.getById(channelAndMember.channelId());
+        return ChannelDetailResponse.fromEntity(channel);
     }
 }
