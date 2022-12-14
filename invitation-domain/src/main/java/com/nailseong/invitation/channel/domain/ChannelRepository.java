@@ -41,4 +41,12 @@ public class ChannelRepository {
     public ChannelMember saveMember(final ChannelMember channelMember) {
         return channelMemberRepo.save(channelMember);
     }
+
+    public List<Channel> findAllByMemberId(final Long memberId) {
+        final List<Long> channelIds = channelMemberRepo.findAllByMemberId(memberId)
+                .stream()
+                .map(ChannelMember::getChannelId)
+                .toList();
+        return channelRepo.findAllById(channelIds);
+    }
 }
