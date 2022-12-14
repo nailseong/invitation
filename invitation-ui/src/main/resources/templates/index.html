@@ -12,7 +12,30 @@
 
 <div th:if="${isLogin}">
     <h2 th:text="'Hello ' + ${username}"></h2>
-<!--    TODO: Display list of channels user joined-->
+
+    <div th:if="${channels.empty}">
+        There is no channels.
+    </div>
+
+    <div th:if="${!channels.empty}">
+        <table class="tb_col">
+            <tr>
+                <th>maxPeople</th>
+                <th>numberOfPeople</th>
+                <th>isHost</th>
+            </tr>
+            <tr th:each="channel : ${channels}">
+                <td th:text="${channel.maxPeople}"></td>
+                <td th:text="${channel.numberOfPeople}"></td>
+                <td th:text="${channel.isHost}"></td>
+                <td>
+                    <a th:href="@{/channels/} + ${channel.channelId}">
+                        show more
+                    </a>
+                </td>
+            </tr>
+        </table>
+    </div>
 </div>
 
 <div th:if="!${isLogin}">
