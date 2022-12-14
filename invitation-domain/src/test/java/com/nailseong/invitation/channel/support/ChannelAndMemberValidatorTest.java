@@ -6,12 +6,11 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 
 import com.nailseong.invitation.channel.domain.Channel;
-import com.nailseong.invitation.channel.domain.ChannelMember;
+import com.nailseong.invitation.channel.domain.ChannelFixture;
 import com.nailseong.invitation.channel.domain.ChannelRepository;
 import com.nailseong.invitation.channel.exception.ChannelNotFoundException;
 import com.nailseong.invitation.channel.exception.NotChannelMemberException;
 import com.nailseong.invitation.channel.exception.NotHostException;
-import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -23,6 +22,10 @@ import org.springframework.aop.framework.DefaultAopProxyFactory;
 
 @DisplayName("ChannelAndMember 검증 테스트")
 class ChannelAndMemberValidatorTest {
+
+    private static final Long CHANNEL_ID = 7L;
+    private static final Long HOST_ID = 3L;
+    private static final Long GUEST_ID = 11L;
 
     @Mock
     private ChannelRepository channelRepo;
@@ -52,7 +55,7 @@ class ChannelAndMemberValidatorTest {
 
         @ChannelMemberOnly
         Long channelMemberOnly(final ChannelAndMember channelAndMember) {
-            return channelAndMember.channelId();
+            return channelAndMember.memberId();
         }
     }
 
@@ -60,18 +63,15 @@ class ChannelAndMemberValidatorTest {
     @DisplayName("방장 여부 검증 기능이")
     class ValidateHost {
 
-        private final Long hostId = 3L;
-
         @Test
         @DisplayName("성공한다.")
         void success() {
             // given
-            final ChannelMember host = ChannelMember.ofHost(hostId, "rick");
-            final Channel channel = Channel.ofNew(hostId, 2, host);
+            final Channel channel = ChannelFixture.getChannel(CHANNEL_ID, HOST_ID);
             given(channelRepo.getById(anyLong()))
                     .willReturn(channel);
 
-            final ChannelAndMember channelAndMember = new ChannelAndMember(7L, hostId);
+            final ChannelAndMember channelAndMember = new ChannelAndMember(CHANNEL_ID, HOST_ID);
 
             // when & then
             assertThatCode(() -> proxyService.hostOnly(channelAndMember))
@@ -89,7 +89,7 @@ class ChannelAndMemberValidatorTest {
                 given(channelRepo.getById(anyLong()))
                         .willThrow(new ChannelNotFoundException());
 
-                final ChannelAndMember channelAndMember = new ChannelAndMember(7L, hostId);
+                final ChannelAndMember channelAndMember = new ChannelAndMember(CHANNEL_ID, HOST_ID);
 
                 // when & then
                 assertThatThrownBy(() -> proxyService.hostOnly(channelAndMember))
@@ -100,12 +100,11 @@ class ChannelAndMemberValidatorTest {
             @DisplayName("호스트가 아닌 경우이다.")
             void notHost() {
                 // given
-                final ChannelMember host = ChannelMember.ofHost(hostId, "rick");
-                final Channel channel = Channel.ofNew(hostId, 2, host);
+                final Channel channel = ChannelFixture.getChannel(CHANNEL_ID, HOST_ID);
                 given(channelRepo.getById(anyLong()))
                         .willReturn(channel);
 
-                final ChannelAndMember channelAndMember = new ChannelAndMember(7L, hostId + 1);
+                final ChannelAndMember channelAndMember = new ChannelAndMember(CHANNEL_ID, HOST_ID + 1);
 
                 // when & then
                 assertThatThrownBy(() -> proxyService.hostOnly(channelAndMember))
@@ -118,23 +117,15 @@ class ChannelAndMemberValidatorTest {
     @DisplayName("채널에 가입한 사용자 여부 검증 기능이")
     class ValidateChannelMember {
 
-        private final Long channelId = 7L;
-        private final Long hostId = 3L;
-        private final ChannelMember host = ChannelMember.ofHost(hostId, "rick");
-        private final Channel channel = Channel.ofNew(hostId, 2, host);
-        private final Long guestId = 11L;
-        private final ChannelMember guest = ChannelMember.ofGuest(channelId, guestId, "rick2");
-
         @Test
         @DisplayName("성공한다.")
         void success() {
             // given
-            final List<ChannelMember> channelMembers = List.of(guest);
-            channel.setChannelMembers(channelMembers);
+            final Channel channel = ChannelFixture.getChannel(CHANNEL_ID, HOST_ID, GUEST_ID);
             given(channelRepo.getById(anyLong()))
                     .willReturn(channel);
 
-            final ChannelAndMember channelAndMember = new ChannelAndMember(channelId, guestId);
+            final ChannelAndMember channelAndMember = new ChannelAndMember(CHANNEL_ID, GUEST_ID);
 
             // when & then
             assertThatCode(() -> proxyService.channelMemberOnly(channelAndMember))
@@ -152,7 +143,7 @@ class ChannelAndMemberValidatorTest {
                 given(channelRepo.getById(anyLong()))
                         .willThrow(new ChannelNotFoundException());
 
-                final ChannelAndMember channelAndMember = new ChannelAndMember(channelId, guestId);
+                final ChannelAndMember channelAndMember = new ChannelAndMember(CHANNEL_ID, GUEST_ID);
 
                 // when & then
                 assertThatThrownBy(() -> proxyService.channelMemberOnly(channelAndMember))
@@ -163,12 +154,11 @@ class ChannelAndMemberValidatorTest {
             @DisplayName("채널에 가입한 사용자가 아닌 경우이다.")
             void notChannelMember() {
                 // given
-                final List<ChannelMember> channelMembers = List.of(guest);
-                channel.setChannelMembers(channelMembers);
+                final Channel channel = ChannelFixture.getChannel(CHANNEL_ID, HOST_ID, GUEST_ID);
                 given(channelRepo.getById(anyLong()))
                         .willReturn(channel);
 
-                final ChannelAndMember channelAndMember = new ChannelAndMember(channelId, guestId + 1);
+                final ChannelAndMember channelAndMember = new ChannelAndMember(CHANNEL_ID, GUEST_ID + 1);
 
                 // when & then
                 assertThatThrownBy(() -> proxyService.channelMemberOnly(channelAndMember))
